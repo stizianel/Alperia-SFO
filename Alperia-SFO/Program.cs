@@ -5,6 +5,9 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CsvHelper;
+using System.Globalization;
+using MongoDB.Bson;
 
 namespace Alperia_SFO
 {
@@ -19,28 +22,90 @@ namespace Alperia_SFO
             ofd.ShowDialog();
             var fileInput = ofd.FileName;
             Console.WriteLine("Reading z1.csv");
-
-            List<Z1> LZ1 = ProcessFileInput(fileInput);
-
+            
             var ctx = new Z1Context();
+            var fileOutAlperia = "E:\\work\\Alperia\\outAlperia.csv";
+            var fileOutSum = "E:\\work\\Alperia\\outSum.csv"; ;
 
-            InsMongo(LZ1, ctx).GetAwaiter().GetResult();
+            using (var reader = new StreamReader(fileInput))
+            using (var walperia = new StreamWriter(fileOutAlperia))
+            using (var wsum = new StreamWriter(fileOutSum))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            using (var alpCsv = new CsvWriter(walperia, CultureInfo.InvariantCulture))
+            using (var sumCsv = new CsvWriter(wsum, CultureInfo.InvariantCulture))
+            {
+                csv.Configuration.Delimiter = ";";
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+                alpCsv.Configuration.Delimiter = ";";
+                sumCsv.Configuration.Delimiter = ";";
+                try
+                {
+                    var records = csv.GetRecords<Z1>();
+
+                    var lZ1 = records.ToList();
+
+                    var elenco = lZ1.Select(p => p.NE__Order_Item__c);
+                    var toProc = elenco.Distinct();
+
+                    foreach (var k in toProc)
+                    {
+                        var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
+                        Z1Test.CheckPaymentMethod(rec.SAP_PaymentMethod__c);
+                        Z1Test.CheckVatCode(rec.VatRate__c, rec.NE__OrderId__c);
+                        Z1Test.CheckProcessType(rec.Process__c);
+                        Z1Test.CheckHoldingType(rec.HoldingType__c);
+                        Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c);
+                        Z1Test.CheckSubjectSubtype(rec.SubjectSubtype__c);
+                        if (rec.Process__c != "ChangeOffer") {
+                            Z1Test.CheckUsageType(rec.UsageType__c, rec.NE__OrderId__c);
+                            Z1Test.CheckTargetMarket(rec.TargetMarket__c);
+                        }
+                        //var brec = rec.ToBson();
+                        InsMongoSingle(rec, ctx, fileInput);
+                    }
+
+                    var alperia = lZ1.Where(p => p.Division__c == "ASMS");
+                    alpCsv.WriteRecords<Z1>(alperia);
+                    var sum = lZ1.Where(p => p.Division__c == "ASUM");
+                    sumCsv.WriteRecords<Z1>(sum);
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                };
+
+                
+            }
 
             Console.WriteLine("Fine programma");
+            Console.ReadKey();
         }
-        private static async Task InsMongo(List<Z1> LZ1, Z1Context ctx)
+        private static void InsMongoSingle(Z1 doc, Z1Context ctx, string fname)
         {
-            await ctx.Z1s.InsertManyAsync(LZ1);
-        }
-        private static List<Z1> ProcessFileInput(string path)
-        {
-            return
-            File.ReadAllLines(path)
-                .Skip(1)
-                .Where(line => line.Length > 1)
-                .Select(Z1.ParseFromCsv)
-                .ToList();
-        }
+            try
+            {
+                doc.fileName = fname;
+                ctx.Z1s.InsertOne(doc);
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("record duplicato {0}", doc.NE__OrderId__c);
+            }
+            
+        }   
+        //private static List<Z1> ProcessFileInput(string path)
+        //{
+        //    //return
+        //    //File.ReadAllLines(path)
+        //    //    .Skip(1)
+        //    //    .Where(line => line.Length > 1)
+        //    //    .Select(Z1.ParseFromCsv)
+        //    //    .ToList();
+        //}
     }
 
 

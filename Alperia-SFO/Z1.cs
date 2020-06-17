@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace Alperia_SFO
 {
     public class Z1
     {
+        [BsonIgnore]
+        public string Name { get; set; }
+        [BsonIgnore]
         public string NE__Value__c { get; set; }
         public string Usage_Category__c { get; set; }
         public string WithdrawalClass__c { get; set; }
@@ -34,7 +38,6 @@ namespace Alperia_SFO
         public string AssetCountry__c { get; set; }
         public string NE__Activation_Date__c { get; set; }
         public string UsageType__c { get; set; }
-        public string MyProperty { get; set; }
         public string Process__c { get; set; }
         public string TargetMarket__c { get; set; }
         public string AccountCustomerType__c { get; set; }
@@ -48,6 +51,7 @@ namespace Alperia_SFO
         public string Phone__c { get; set; }
         public string PreferredLanguage__c { get; set; }
         public string SAP_AccountLegalForm__c { get; set; }
+        public string HoldingType__c { get; set; }
         public string isResidentAtSupply__c { get; set; }
         public string BillingCountry__c { get; set; }
         public string BillingProvince__c { get; set; }
@@ -104,23 +108,13 @@ namespace Alperia_SFO
         public string ProfilingConsent__c { get; set; }
         public string Note__c  { get; set; }
         public string ZappKeyContract__c { get; set; }
+        [BsonId]
         public string NE__Order_Item__c { get; set; }
-        public string HolderFullName__c { get; set; }
+        public string HolderCompanyName__c { get; set; }
+        public string ContactPartnerCode__c { get; set; }
+        public string AnnualConsumptionSmcYear__c { get; set; }
+        public string fileName { get; set; }
 
-        public static Z1 ParseFromCsv(string line)
-        {
-            var columns = line.Split(';');
-
-            return new Z1
-            {
-                Usage_Category__c = columns[2],
-                WithdrawalClass__c = columns[3],
-                AnnualConsumption__c = columns[4],
-                SAP_PaymentMethod__c = columns[5],
-
-                NE__Order_Item__c = columns[90]
-            };
-        }
     }
 
     public class Z1Context
@@ -137,17 +131,154 @@ namespace Alperia_SFO
         public IMongoCollection<Z1> Z1s => _db.GetCollection<Z1>("Z1");
     }
 
-    class Z1Test
+    public class Z1Test
     {
-        readonly Dictionary<string, string> mydic = new Dictionary<string, string>
+        public static void CheckPaymentMethod(string i_pay)
         {
-            ["BNK"] = "BON",
-            ["CCD"] = "CICCIO",
-            ["MAV"] = "MAV",
-            ["PST"] = "PST",
-            ["RAV"] = "RAV",
-            ["SDD"] = "SDD"
+                if (!paymentMethod.ContainsKey(i_pay) ) {
+                       Console.WriteLine("Pay KO");
+               }
+
+        }
+        public static void CheckVatCode(string i_vat, string i_order)
+        {
+            int number;
+            bool success = Int32.TryParse(i_vat, out number);
+            if (!vatCode.ContainsKey(number))
+            {
+                Console.WriteLine("Vat KO {0}", i_order);
+            }
+
+        }
+        public static void CheckProcessType(string i_proc)
+        {
+            if (!process_type.ContainsKey(i_proc))
+            {
+                Console.WriteLine("Process_Type KO");
+            }
+
+        }
+        public static void CheckTargetMarket(string i_tma)
+        {
+            if (!target_market.ContainsKey(i_tma))
+            {
+                Console.WriteLine("TargetMarket KO");
+            }
+
+        }
+        public static void CheckAccountCustomerType(string i_act)
+        {
+            if (!account_customer_type.ContainsKey(i_act))
+            {
+                Console.WriteLine("AccountCustomerType KO");
+            }
+
+        }
+
+        public static void CheckHoldingType(string i_hot)
+        {
+            if (!holding_type.ContainsKey(i_hot))
+            {
+                Console.WriteLine("HoldingType KO");
+            }
+
+        }
+
+        public static void CheckUsageType(string i_ust, string i_order)
+        {
+            if (!usage_type.ContainsKey(i_ust))
+            {
+                Console.WriteLine("UsageType KO {0}", i_order);
+            }
+
+        }
+
+        public static void CheckSubjectSubtype(string i_sst)
+        {
+            if (i_sst.Length > 0)
+            {
+                if (!subject_subtype.ContainsKey(i_sst))
+                {
+                    Console.WriteLine("SubjectSubtype KO");
+                }
+            }
+            
+
+        }
+
+        private static readonly Dictionary<string, string> paymentMethod = new Dictionary<string, string>
+        {
+           ["BNK"] = "BON",
+           ["CCD"] = "CICCIO",
+           ["MAV"] = "MAV",
+           ["PST"] = "PST",
+           ["RAV"] = "RAV",
+           ["SDD"] = "SDD"
         };
-        
+
+        private static readonly Dictionary<int, string> vatCode = new Dictionary<int, string>
+        {
+            [1] = "BON",
+            [2] = "CICCIO",
+            [3] = "MAV",
+            [4] = "PST",
+            [5] = "RAV",
+            [6] = "SDD",
+            [7] = "SDD",
+            [8] = "SDD",
+            [9] = "SDD",
+            [10] = "SDD",
+            [11] = "SDD",
+            [12] = "SDD",
+            [13] = "SDD",
+            [14] = "SDD"
+        };
+
+        private static readonly Dictionary<string, string> process_type = new Dictionary<string, string>
+        {
+            ["ChangeOffer"] = "BON",
+            ["SwitchIn"] = "CICCIO"
+        };
+
+        private static readonly Dictionary<string, string> target_market = new Dictionary<string, string>
+        {
+            ["L"] = "L",
+            ["T"] = "T",
+            ["S"] = "S"
+        };
+
+        private static readonly Dictionary<string, string> holding_type = new Dictionary<string, string>
+        {
+            ["FOCT001"] = "L",
+            ["FOCT002"] = "T",
+            ["FOCT004"] = "S",
+            ["FOCT005"] = "S",
+            ["FOCT006"] = "S"
+        };
+
+        private static readonly Dictionary<string, string> account_customer_type = new Dictionary<string, string>
+        {
+            ["RSDN"] = "L",
+            ["SMEN"] = "T",
+            ["CNDM"] = "S",
+            ["ASSC"] = "S"
+        };
+
+        private static readonly Dictionary<string, string> subject_subtype = new Dictionary<string, string>
+        {
+            ["LBPF"] = "L",
+            ["DTIN"] = "T",
+            ["PSGR"] = "S"
+        };
+
+        private static readonly Dictionary<string, string> usage_type = new Dictionary<string, string>
+        {
+            ["0"] = "domestic",
+            ["1"] = "condominio",
+            ["2"] = "altri usi",
+            ["3"] = "servizio pubblico"
+        };
+
     }
+
 }
