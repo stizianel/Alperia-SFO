@@ -8,20 +8,27 @@ using System.Windows.Forms;
 using CsvHelper;
 using System.Globalization;
 using MongoDB.Bson;
+using Serilog;
 
 namespace Alperia_SFO
 {
     
- 
     class Program
     {
         [STAThread]
         static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File("E:\\work\\Alperia\\my_log.log", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.ShowDialog();
             var fileInput = ofd.FileName;
-            Console.WriteLine("Reading z1.csv");
+            Log.Information("The global logger has been configured");
+            Log.Information("Reading z1.csv");
             
             var ctx = new Z1Context();
             var fileOutAlperia = "E:\\work\\Alperia\\outAlperia.csv";
@@ -51,16 +58,18 @@ namespace Alperia_SFO
                     foreach (var k in toProc)
                     {
                         var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
-                        Z1Test.CheckPaymentMethod(rec.SAP_PaymentMethod__c);
-                        Z1Test.CheckVatCode(rec.VatRate__c, rec.NE__OrderId__c);
-                        Z1Test.CheckProcessType(rec.Process__c);
-                        Z1Test.CheckHoldingType(rec.HoldingType__c);
-                        Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c);
-                        Z1Test.CheckSubjectSubtype(rec.SubjectSubtype__c);
+                        Z1Test.CheckPaymentMethod(rec.SAP_PaymentMethod__c, rec.NE__Order_Item__c );
+                        Z1Test.CheckVatCode(rec.VatRate__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckProcessType(rec.Process__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckHoldingType(rec.HoldingType__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckSubjectSubtype(rec.SubjectSubtype__c, rec.NE__Order_Item__c);
                         if (rec.Process__c != "ChangeOffer") {
-                            Z1Test.CheckUsageType(rec.UsageType__c, rec.NE__OrderId__c);
-                            Z1Test.CheckTargetMarket(rec.TargetMarket__c);
+                            Z1Test.CheckUsageType(rec.UsageType__c, rec.NE__Order_Item__c);
+                            Z1Test.CheckTargetMarket(rec.TargetMarket__c, rec.NE__Order_Item__c);
                         }
+                        Z1Test.CheckChannelType(rec.Channel__c, rec.NE__Order_Item__c);
+
                         //var brec = rec.ToBson();
                         InsMongoSingle(rec, ctx, fileInput);
                     }
@@ -73,13 +82,11 @@ namespace Alperia_SFO
                 }
                 catch (Exception)
                 {
-
                     throw;
                 };
-
-                
             }
 
+            Log.Information("Fine programma");
             Console.WriteLine("Fine programma");
             Console.ReadKey();
         }
@@ -93,7 +100,7 @@ namespace Alperia_SFO
             catch (Exception)
             {
 
-                Console.WriteLine("record duplicato {0}", doc.NE__OrderId__c);
+                Log.Information("record duplicato {0}", doc.NE__OrderId__c);
             }
             
         }   
