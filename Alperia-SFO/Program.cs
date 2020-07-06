@@ -69,8 +69,21 @@ namespace Alperia_SFO
                             Z1Test.CheckTargetMarket(rec.TargetMarket__c, rec.NE__Order_Item__c);
                         }
                         Z1Test.CheckChannelType(rec.Channel__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckB2WU__Tariff_Type_Power__c(rec.B2WU__Tariff_Type_Power__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckEngine_Code_D__c(rec.Engine_Code_D__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckExciseEle__c(rec.ExciseEle__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckExciseGas__c(rec.ExciseGas__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckCountry__c(rec.BillingCountry__c, rec.NE__Order_Item__c);
+                        Z1Test.CheckCounty__c(rec.BillingProvince__c, rec.NE__Order_Item__c);
+                        if (rec.Commodity_Type__c == "GAS")
+                        {
+                            Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
+                            Z1Test.CheckB2WU__Tariff_Type_Gas__c(rec.B2WU__Tariff_Type_Gas__c, rec.NE__Order_Item__c);
+                        };
 
                         //var brec = rec.ToBson();
+                        var w_params = lZ1.Where(p => p.NE__Order_Item__c == k).Select(f => new Z1param(f.B2WExtCat__PropertyId__c, f.NE__Value__c)).ToList();
+                        rec.Parameters = w_params;
                         InsMongoSingle(rec, ctx, fileInput);
                     }
 
