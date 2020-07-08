@@ -158,28 +158,45 @@ namespace Alperia_SFO
 
     public class Z1Test
     {
-        public static void CheckPaymentMethod(string i_pay, string i_order)
+        public static bool CheckPaymentMethod(string i_pay, string i_order)
         {
+            bool w_ok = true;
             if (!paymentMethod.ContainsKey(i_pay))
             {
-                Console.WriteLine("Pay KO {0} {1}", i_pay, i_order);
+                Log.Error("PaymentMethod KO {0} {1}", i_pay, i_order);
+                w_ok = false;
             }
-
+            return w_ok;
         }
-        public static void CheckVatCode(string i_vat, string i_order)
+        public static bool CheckVatCode(int i_vat, string i_order)
         {
             if (!vatCode.ContainsKey(i_vat))
             {
                 Log.Error("Vat KO {0} {1}", i_vat, i_order);
+                return false;
             }
+            return true;
 
         }
-        public static void CheckProcessType(string i_proc, string i_order)
+        public static bool CheckProcessType(string i_proc, string i_order)
         {
             if (!process_type.ContainsKey(i_proc))
             {
                 Log.Error("Process_Type KO {0} {1}", i_proc, i_order);
+                return false;
             }
+            return true;
+
+        }
+
+        public static bool CheckCommodityType(string i_proc, string i_order)
+        {
+            if (!commodity_type.ContainsKey(i_proc))
+            {
+                Log.Error("Commodity_Type KO {0} {1}", i_proc, i_order);
+                return false;
+            }
+            return true;
 
         }
         public static void CheckTargetMarket(string i_tma, string i_order)
@@ -190,21 +207,24 @@ namespace Alperia_SFO
             }
 
         }
-        public static void CheckAccountCustomerType(string i_act, string i_order)
+        public static bool CheckAccountCustomerType(string i_act, string i_order)
         {
             if (!account_customer_type.ContainsKey(i_act))
             {
                 Log.Error("AccountCustomerType KO {0} {1}", i_act, i_order);
+                return false;
             }
-
+            return true;
         }
 
-        public static void CheckHoldingType(string i_hot, string i_order)
+        public static bool CheckHoldingType(string i_hot, string i_order)
         {
             if (!holding_type.ContainsKey(i_hot))
             {
                 Log.Error("HoldingType KO {0} {1}", i_hot, i_order);
+                return false;
             }
+            return true;
 
         }
 
@@ -217,37 +237,43 @@ namespace Alperia_SFO
 
         }
 
-        public static void CheckUsageCategory(string i_ust, string i_order)
+        public static bool CheckUsageCategory(string i_ust, string i_order)
         {
             if (!usage_categories.ContainsKey(i_ust))
             {
                 Log.Error("UsageCategory KO {0} {1}", i_ust, i_order);
+                return false;
             }
+            return true;
 
         }
 
-        public static void CheckSubjectSubtype(string i_sst, string i_order)
+        public static bool CheckSubjectSubtype(string i_sst, string i_order)
         {
             if (i_sst.Length > 0)
             {
                 if (!subject_subtype.ContainsKey(i_sst))
                 {
                     Log.Error("SubjectSubtype KO {0} {1}", i_sst, i_order);
+                    return false;
                 }
             }
+            return true;
 
 
         }
 
-        public static void CheckChannelType(string i_cha, string i_order)
+        public static bool CheckChannelType(string i_cha, string i_order)
         {
             if (i_cha.Length > 0)
             {
                 if (!channel_type.ContainsKey(i_cha))
                 {
                     Log.Error("Channel type KO {0} {1}", i_cha, i_order);
+                    return false;
                 }
             }
+            return true;
         }
 
         public static void CheckB2WU__Tariff_Type_Gas__c(string i_cha, string i_order)
@@ -272,15 +298,17 @@ namespace Alperia_SFO
             }
         }
 
-        public static void CheckEngine_Code_D__c(string i_cha, string i_order)
+        public static bool CheckEngine_Code_D__c(string i_cha, string i_order)
         {
             if (i_cha.Length > 0)
             {
                 if (!Engine_Code_D__c.ContainsKey(i_cha))
                 {
                     Log.Error("Engine Code KO {0} {1}", i_cha, i_order);
+                    return false;
                 }
             }
+            return true;
         }
 
         public static void CheckExciseEle__c(string i_cha, string i_order)
@@ -301,6 +329,17 @@ namespace Alperia_SFO
                 if (!ExciseGas__c.ContainsKey(i_cha))
                 {
                     Log.Error("Excise GAS KO {0} {1}", i_cha, i_order);
+                }
+            }
+        }
+
+        public static void CheckWitdrawal__c(string i_cha, string i_order)
+        {
+            if (!string.IsNullOrEmpty(i_cha))
+            {
+                if (!withdrawalClass.ContainsKey(i_cha))
+                {
+                    Log.Error("Withdrawal GAS KO {0} {1}", i_cha, i_order);
                 }
             }
         }
@@ -337,23 +376,38 @@ namespace Alperia_SFO
             ["SDD"] = "SDD"
         };
 
-        private static readonly Dictionary<string, string> vatCode = new Dictionary<string, string>
+        private static readonly Dictionary<int, string> vatCode = new Dictionary<int, string>
         {
-            ["1B"] = "BON",
-            ["2A"] = "CICCIO",
-            ["2B"] = "MAV",
-            ["3A"] = "PST",
-            ["3B"] = "RAV",
-            ["5B"] = "SDD",
-            ["5C"] = "SDD",
-            ["6B"] = "SDD",
-            ["9A"] = "SDD"
+            [1] = "01",
+            [2] = "MAV",
+            [3] = "PST",
+            [4] = "RAV",
+            [5] = "SDD",
+            [6] = "SDD",
+            [7] = "SDD",
+            [8] = "SDD",
+            [9] = "RAV",
+            [10] = "SDD",
+            [11] = "SDD",
+            [12] = "SDD",
+            [13] = "SDD",
+            [14] = "SDD",
+            [15] = "SDD",
+            [16] = "SDD",
+            [17] = "SDD"
+
         };
 
         private static readonly Dictionary<string, string> process_type = new Dictionary<string, string>
         {
             ["ChangeOffer"] = "BON",
             ["SwitchIn"] = "CICCIO"
+        };
+
+        private static readonly Dictionary<string, string> commodity_type = new Dictionary<string, string>
+        {
+            ["ELE"] = "ELE",
+            ["GAS"] = "GAS"
         };
 
         private static readonly Dictionary<string, string> target_market = new Dictionary<string, string>
@@ -406,6 +460,13 @@ namespace Alperia_SFO
             ["C5"] = ".",
             ["T1"] = ".",
             ["T2"] = "."
+        };
+
+        private static readonly Dictionary<string, string> withdrawalClass= new Dictionary<string, string>
+        {
+            ["1"] = ".",
+            ["2"] = ".",
+            ["3"] = "."
         };
 
         private static readonly Dictionary<string, string> channel_type = new Dictionary<string, string>

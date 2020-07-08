@@ -54,44 +54,72 @@ namespace Alperia_SFO
 
                     var elenco = lZ1.Select(p => p.NE__Order_Item__c);
                     var toProc = elenco.Distinct();
+                    
 
                     foreach (var k in toProc)
                     {
+                        List<bool> lerrori = new List<bool>();
                         var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
-                        Z1Test.CheckPaymentMethod(rec.SAP_PaymentMethod__c, rec.NE__Order_Item__c );
-                        Z1Test.CheckVatCode(rec.VatRate__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckProcessType(rec.Process__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckHoldingType(rec.HoldingType__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckSubjectSubtype(rec.SubjectSubtype__c, rec.NE__Order_Item__c);
+                        bool status = true;
+                        status = Z1Test.CheckCommodityType(rec.Commodity_Type__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
+                        if (!status)
+                        {
+                            continue;
+                        }
+                        status = Z1Test.CheckPaymentMethod(rec.SAP_PaymentMethod__c, rec.NE__Order_Item__c );
+                        lerrori.Add(status);
+                        status = Z1Test.CheckVatCode(Int16.Parse(rec.VatRate__c), rec.NE__Order_Item__c);
+                        lerrori.Add(status);
+                        status = Z1Test.CheckProcessType(rec.Process__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
+                        status = Z1Test.CheckHoldingType(rec.HoldingType__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
+                        status = Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
+                        status = Z1Test.CheckSubjectSubtype(rec.SubjectSubtype__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
                         if (rec.Process__c != "ChangeOffer") {
                             Z1Test.CheckUsageType(rec.UsageType__c, rec.NE__Order_Item__c);
                             Z1Test.CheckTargetMarket(rec.TargetMarket__c, rec.NE__Order_Item__c);
                         }
-                        Z1Test.CheckChannelType(rec.Channel__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckB2WU__Tariff_Type_Power__c(rec.B2WU__Tariff_Type_Power__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckEngine_Code_D__c(rec.Engine_Code_D__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckExciseEle__c(rec.ExciseEle__c, rec.NE__Order_Item__c);
-                        Z1Test.CheckExciseGas__c(rec.ExciseGas__c, rec.NE__Order_Item__c);
+                        status = Z1Test.CheckChannelType(rec.Channel__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
+                        status = Z1Test.CheckEngine_Code_D__c(rec.Engine_Code_D__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
                         Z1Test.CheckCountry__c(rec.BillingCountry__c, rec.NE__Order_Item__c);
                         Z1Test.CheckCounty__c(rec.BillingProvince__c, rec.NE__Order_Item__c);
+                        if (rec.Commodity_Type__c == "ELE")
+                        {
+                            Z1Test.CheckExciseEle__c(rec.ExciseEle__c, rec.NE__Order_Item__c);
+                            Z1Test.CheckB2WU__Tariff_Type_Power__c(rec.B2WU__Tariff_Type_Power__c, rec.NE__Order_Item__c);
+                        }
                         if (rec.Commodity_Type__c == "GAS")
                         {
-                            Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
+                            status = Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
+                            lerrori.Add(status);
                             Z1Test.CheckB2WU__Tariff_Type_Gas__c(rec.B2WU__Tariff_Type_Gas__c, rec.NE__Order_Item__c);
+                            Z1Test.CheckWitdrawal__c(rec.WithdrawalClass__c, rec.NE__Order_Item__c);
+                            Z1Test.CheckExciseGas__c(rec.ExciseGas__c, rec.NE__Order_Item__c);
                         };
 
                         //var brec = rec.ToBson();
                         var w_params = lZ1.Where(p => p.NE__Order_Item__c == k).Select(f => new Z1param(f.B2WExtCat__PropertyId__c, f.NE__Value__c)).ToList();
                         rec.Parameters = w_params;
-                        InsMongoSingle(rec, ctx, fileInput);
+                        if (!lerrori.Contains(false))
+                        {
+                            InsMongoSingle(rec, ctx, fileInput);
+                            var recs = lZ1.Where(p => p.NE__Order_Item__c == k);
+                            if (rec.Division__c == "ASMS")
+                            {                               
+                                alpCsv.WriteRecords<Z1>(recs);
+                            } else
+                            {
+                                sumCsv.WriteRecord<Z1>(rec);
+                            }
+                            
+                        }
                     }
-
-                    var alperia = lZ1.Where(p => p.Division__c == "ASMS");
-                    alpCsv.WriteRecords<Z1>(alperia);
-                    var sum = lZ1.Where(p => p.Division__c == "ASUM");
-                    sumCsv.WriteRecords<Z1>(sum);
-
                 }
                 catch (Exception)
                 {
