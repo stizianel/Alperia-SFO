@@ -69,19 +69,23 @@ namespace Alperia_SFO
                         }
                         status = Z1Test.CheckPaymentMethod(rec.SAP_PaymentMethod__c, rec.NE__Order_Item__c );
                         lerrori.Add(status);
-                        status = Z1Test.CheckVatCode(Int16.Parse(rec.VatRate__c), rec.NE__Order_Item__c);
-                        lerrori.Add(status);
                         status = Z1Test.CheckProcessType(rec.Process__c, rec.NE__Order_Item__c);
                         lerrori.Add(status);
                         status = Z1Test.CheckHoldingType(rec.HoldingType__c, rec.NE__Order_Item__c);
-                        lerrori.Add(status);
-                        status = Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c, rec.NE__Order_Item__c);
                         lerrori.Add(status);
                         status = Z1Test.CheckSubjectSubtype(rec.SubjectSubtype__c, rec.NE__Order_Item__c);
                         lerrori.Add(status);
                         if (rec.Process__c != "ChangeOffer") {
                             Z1Test.CheckUsageType(rec.UsageType__c, rec.NE__Order_Item__c);
+                            status = Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
+                            lerrori.Add(status);
                             Z1Test.CheckTargetMarket(rec.TargetMarket__c, rec.NE__Order_Item__c);
+                            short number;
+                            Int16.TryParse(rec.VatRate__c, out number);
+                            status = Z1Test.CheckVatCode(number, rec.NE__Order_Item__c);
+                            lerrori.Add(status);
+                            status = Z1Test.CheckAccountCustomerType(rec.AccountCustomerType__c, rec.NE__Order_Item__c);
+                            lerrori.Add(status);
                         }
                         status = Z1Test.CheckChannelType(rec.Channel__c, rec.NE__Order_Item__c);
                         lerrori.Add(status);
@@ -96,8 +100,6 @@ namespace Alperia_SFO
                         }
                         if (rec.Commodity_Type__c == "GAS")
                         {
-                            status = Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
-                            lerrori.Add(status);
                             Z1Test.CheckB2WU__Tariff_Type_Gas__c(rec.B2WU__Tariff_Type_Gas__c, rec.NE__Order_Item__c);
                             Z1Test.CheckWitdrawal__c(rec.WithdrawalClass__c, rec.NE__Order_Item__c);
                             Z1Test.CheckExciseGas__c(rec.ExciseGas__c, rec.NE__Order_Item__c);

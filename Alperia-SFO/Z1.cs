@@ -76,7 +76,6 @@ namespace Alperia_SFO
         public string NE__Iban__c { get; set; }
         public string ContractType__c { get; set; }
         public string Engine_Code_D__c { get; set; }
-        public string Energia_Verde_Power_PMI__c { get; set; }
         public string L1__c { get; set; }
         public string L2__c { get; set; }
         public string L3__c { get; set; }
@@ -115,6 +114,7 @@ namespace Alperia_SFO
         public string HolderCompanyName__c { get; set; }
         public string ContactPartnerCode__c { get; set; }
         public string AnnualConsumptionSmcYear__c { get; set; }
+        public string ZappKeyDirectDebit__c { get; set; }
         [Ignore]
         public string fileName { get; set; }
         [Ignore]
@@ -300,14 +300,11 @@ namespace Alperia_SFO
 
         public static bool CheckEngine_Code_D__c(string i_cha, string i_order)
         {
-            if (i_cha.Length > 0)
-            {
-                if (!Engine_Code_D__c.ContainsKey(i_cha))
+            if (!Engine_Code_D__c.ContainsKey(i_cha))
                 {
                     Log.Error("Engine Code KO {0} {1}", i_cha, i_order);
                     return false;
                 }
-            }
             return true;
         }
 
