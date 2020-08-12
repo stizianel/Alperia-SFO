@@ -20,14 +20,23 @@ namespace ListAllFiles
             List<Z1> recs = new List<Z1>();
 
             var fileOutAlperia = "E:\\work\\Alperia\\listRequests.csv";
+            var fileUat = "E:\\work\\Alperia\\podUat.csv";
+
             using (var walperia = new StreamWriter(fileOutAlperia))
             using (var reqsCsv = new CsvWriter(walperia, CultureInfo.InvariantCulture))
+            using (var rfileUat = new StreamReader(fileUat)) 
+            using (var podUat = new CsvReader(rfileUat, CultureInfo.InvariantCulture))
             {
                 reqsCsv.Configuration.Delimiter = ";";
+                podUat.Configuration.Delimiter = ";";
+
+                var recUat = podUat.GetRecords<Uat>();
+                var lUat = recUat.ToList();
+
                 string[] fileEntries = Directory.GetFiles(targetDirectory);
                 foreach (string fileName in fileEntries)
                 {
-                    recs = ProcessFile(fileName);
+                    recs = ProcessFile(fileName, lUat);
                     reqsCsv.WriteRecords<Z1>(recs);
                 }
             }
@@ -36,7 +45,7 @@ namespace ListAllFiles
 
         }
 
-        private static List<Z1> ProcessFile(string fileName)
+        private static List<Z1> ProcessFile(string fileName, List<Uat> lUat)
         {
             List<Z1> outrec = new List<Z1>();
             using (var reader = new StreamReader(fileName))
@@ -59,6 +68,11 @@ namespace ListAllFiles
                     {
                         var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
                         rec.fileName = fileName;
+                        var res = lUat.Find(p => p.Pod_pdr == rec.PodPdrPdc__c);
+                        if (res != null)
+                        {
+                            rec.Scenario = res.Scenario;
+                        }
                         outrec.Add(rec);
                     }
                 }
@@ -174,5 +188,12 @@ namespace ListAllFiles
         public string AnnualConsumptionSmcYear__c { get; set; }
         public string ZappKeyDirectDebit__c { get; set; }
         public string fileName { get; set; }
+        public string Scenario { get; set; }
+    }
+
+    class Uat
+    {
+        public string Scenario { get; set; }
+        public string Pod_pdr { get; set; }
     }
 }

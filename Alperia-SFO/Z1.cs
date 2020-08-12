@@ -163,7 +163,7 @@ namespace Alperia_SFO
             bool w_ok = true;
             if (!paymentMethod.ContainsKey(i_pay))
             {
-                Log.Error("PaymentMethod KO {0} {1}", i_pay, i_order);
+                Log.Error("{1} PaymentMethod KO {0} ", i_pay, i_order);
                 w_ok = false;
             }
             return w_ok;
@@ -172,7 +172,7 @@ namespace Alperia_SFO
         {
             if (!vatCode.ContainsKey(i_vat))
             {
-                Log.Error("Vat KO {0} {1}", i_vat, i_order);
+                Log.Error("{1} Vat KO {0} ", i_vat, i_order);
                 return false;
             }
             return true;
@@ -182,7 +182,7 @@ namespace Alperia_SFO
         {
             if (!process_type.ContainsKey(i_proc))
             {
-                Log.Error("Process_Type KO {0} {1}", i_proc, i_order);
+                Log.Error("{1} Process_Type KO {0} ", i_proc, i_order);
                 return false;
             }
             return true;
@@ -193,7 +193,7 @@ namespace Alperia_SFO
         {
             if (!commodity_type.ContainsKey(i_proc))
             {
-                Log.Error("Commodity_Type KO {0} {1}", i_proc, i_order);
+                Log.Error("{1} Commodity_Type KO {0} ", i_proc, i_order);
                 return false;
             }
             return true;
@@ -203,7 +203,7 @@ namespace Alperia_SFO
         {
             if (!target_market.ContainsKey(i_tma))
             {
-                Log.Error("TargetMarket KO {0} {1}", i_tma, i_order);
+                Log.Error("{1} TargetMarket KO {0} ", i_tma, i_order);
             }
 
         }
@@ -211,7 +211,7 @@ namespace Alperia_SFO
         {
             if (!account_customer_type.ContainsKey(i_act))
             {
-                Log.Error("AccountCustomerType KO {0} {1}", i_act, i_order);
+                Log.Error("{1} AccountCustomerType KO {0} ", i_act, i_order);
                 return false;
             }
             return true;
@@ -221,7 +221,7 @@ namespace Alperia_SFO
         {
             if (!holding_type.ContainsKey(i_hot))
             {
-                Log.Error("HoldingType KO {0} {1}", i_hot, i_order);
+                Log.Error("{1} HoldingType KO {0} ", i_hot, i_order);
                 return false;
             }
             return true;
@@ -232,7 +232,7 @@ namespace Alperia_SFO
         {
             if (!usage_type.ContainsKey(i_ust))
             {
-                Log.Error("UsageType KO {0} {1}", i_ust, i_order);
+                Log.Error("{1} UsageType KO {0} ", i_ust, i_order);
             }
 
         }
@@ -241,7 +241,7 @@ namespace Alperia_SFO
         {
             if (!usage_categories.ContainsKey(i_ust))
             {
-                Log.Error("UsageCategory KO {0} {1}", i_ust, i_order);
+                Log.Error("{1} UsageCategory KO {0} ", i_ust, i_order);
                 return false;
             }
             return true;
@@ -254,7 +254,7 @@ namespace Alperia_SFO
             {
                 if (!subject_subtype.ContainsKey(i_sst))
                 {
-                    Log.Error("SubjectSubtype KO {0} {1}", i_sst, i_order);
+                    Log.Error("{1} SubjectSubtype KO {0} ", i_sst, i_order);
                     return false;
                 }
             }
@@ -269,7 +269,7 @@ namespace Alperia_SFO
             {
                 if (!channel_type.ContainsKey(i_cha))
                 {
-                    Log.Error("Channel type KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Channel type KO {0} ", i_cha, i_order);
                     return false;
                 }
             }
@@ -282,7 +282,7 @@ namespace Alperia_SFO
             {
                 if (!B2WU__Tariff_Type_Gas__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Tariff type gas KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Tariff type gas KO {0} ", i_cha, i_order);
                 }
             }
         }
@@ -293,7 +293,7 @@ namespace Alperia_SFO
             {
                 if (!B2WU__Tariff_Type_Power__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Tariff type power KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Tariff type power KO {0} ", i_cha, i_order);
                 }
             }
         }
@@ -302,7 +302,7 @@ namespace Alperia_SFO
         {
             if (!Engine_Code_D__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Engine Code KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Engine Code KO {0} ", i_cha, i_order);
                     return false;
                 }
             return true;
@@ -314,7 +314,7 @@ namespace Alperia_SFO
             {
                 if (!ExciseEle__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Excise ELE KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Excise ELE KO {0} ", i_cha, i_order);
                 }
             }
         }
@@ -325,7 +325,7 @@ namespace Alperia_SFO
             {
                 if (!ExciseGas__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Excise GAS KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Excise GAS KO {0} ", i_cha, i_order);
                 }
             }
         }
@@ -336,20 +336,22 @@ namespace Alperia_SFO
             {
                 if (!withdrawalClass.ContainsKey(i_cha))
                 {
-                    Log.Error("Withdrawal GAS KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Withdrawal GAS KO {0} ", i_cha, i_order);
                 }
             }
         }
 
-        public static void CheckCountry__c(string i_cha, string i_order)
+        public static bool CheckCountry__c(string i_cha, string i_order)
         {
             if (i_cha.Length > 0)
             {
                 if (!Countries__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Country KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Country KO {0} ", i_cha, i_order);
+                    return false;
                 }
             }
+            return true;
         }
 
         public static void CheckCounty__c(string i_cha, string i_order)
@@ -358,7 +360,7 @@ namespace Alperia_SFO
             {
                 if (!Counties__c.ContainsKey(i_cha))
                 {
-                    Log.Error("Provincia KO {0} {1}", i_cha, i_order);
+                    Log.Error("{1} Provincia KO {0} ", i_cha, i_order);
                 }
             }
         }

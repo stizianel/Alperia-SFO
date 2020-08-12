@@ -5,7 +5,20 @@ VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alperia-SFO", "Alperia-SFO\Alperia-SFO.csproj", "{8CC031FD-EB15-4531-B6A0-8DB791190AC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListAllFiles", "ListAllFiles\ListAllFiles.csproj", "{D9C12E6E-18A0-4590-A644-DEA7A76F7E28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListAllFiles", "ListAllFiles\ListAllFiles.csproj", "{D9C12E6E-18A0-4590-A644-DEA7A76F7E28}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00A2A1FF-2E29-4781-A592-D1581C722C59}"
+	ProjectSection(SolutionItems) = preProject
+		Account.cs = Account.cs
+		Assett.cs = Assett.cs
+		BillingProfile.cs = BillingProfile.cs
+		DirectDebit.cs = DirectDebit.cs
+		MainEle.cs = MainEle.cs
+		MigKeys.cs = MigKeys.cs
+		ServicePoint.cs = ServicePoint.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alperia-ISU-New", "Alperia-ISU-New\Alperia-ISU-New.csproj", "{3395EA0E-D403-407A-8019-4C451F513A19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +34,10 @@ Global
 		{D9C12E6E-18A0-4590-A644-DEA7A76F7E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9C12E6E-18A0-4590-A644-DEA7A76F7E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9C12E6E-18A0-4590-A644-DEA7A76F7E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3395EA0E-D403-407A-8019-4C451F513A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3395EA0E-D403-407A-8019-4C451F513A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3395EA0E-D403-407A-8019-4C451F513A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3395EA0E-D403-407A-8019-4C451F513A19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

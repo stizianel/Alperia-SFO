@@ -9,6 +9,9 @@ using CsvHelper;
 using System.Globalization;
 using MongoDB.Bson;
 using Serilog;
+using Serilog.Core;
+using System.Runtime.InteropServices.ComTypes;
+using MongoDB.Driver;
 
 namespace Alperia_SFO
 {
@@ -21,46 +24,63 @@ namespace Alperia_SFO
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("E:\\work\\Alperia\\my_log.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("E:\\work\\Alperia\\log-Z1.log", rollingInterval: RollingInterval.Minute)
             .CreateLogger();
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.ShowDialog();
             var fileInput = ofd.FileName;
-            Log.Information("The global logger has been configured");
-            Log.Information("Reading z1.csv");
+            Log.Information("File processato: {0}", fileInput);
             
             var ctx = new Z1Context();
             var fileOutAlperia = "E:\\work\\Alperia\\outAlperia.csv";
-            var fileOutSum = "E:\\work\\Alperia\\outSum.csv"; ;
+            var fileOutSum = "E:\\work\\Alperia\\outSum.csv";
+            var fileUat = "E:\\work\\Alperia\\podUat.csv";
 
+            DelMongoFromFilename(ctx, fileInput);
+
+            using (var ruat = new StreamReader(fileUat))
+            using (var cuat = new CsvReader(ruat, CultureInfo.InvariantCulture))
             using (var reader = new StreamReader(fileInput))
             using (var walperia = new StreamWriter(fileOutAlperia))
             using (var wsum = new StreamWriter(fileOutSum))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             using (var alpCsv = new CsvWriter(walperia, CultureInfo.InvariantCulture))
             using (var sumCsv = new CsvWriter(wsum, CultureInfo.InvariantCulture))
+
             {
                 csv.Configuration.Delimiter = ";";
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
                 alpCsv.Configuration.Delimiter = ";";
                 sumCsv.Configuration.Delimiter = ";";
+                cuat.Configuration.Delimiter = ";";
+
                 try
                 {
+                    var recUat = cuat.GetRecords<Uat>();
                     var records = csv.GetRecords<Z1>();
 
                     var lZ1 = records.ToList();
+                    var lUat = recUat.ToList();
 
                     var elenco = lZ1.Select(p => p.NE__Order_Item__c);
+                    var elencoUat = lUat.Select(p => p.Pod_pdr);
                     var toProc = elenco.Distinct();
                     
 
                     foreach (var k in toProc)
                     {
+                        
                         List<bool> lerrori = new List<bool>();
                         var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
                         bool status = true;
+                        Log.Information("--------------------------------------");
+                        Log.Information("SFDC ID: {0}", rec.NE__Order_Item__c);
+                        if ( elencoUat.Contains(rec.PodPdrPdc__c)) {
+                            Log.Information("POD in lista UAT {0} ", rec.PodPdrPdc__c, rec.NE__Order_Item__c);
+                        }
+
                         status = Z1Test.CheckCommodityType(rec.Commodity_Type__c, rec.NE__Order_Item__c);
                         lerrori.Add(status);
                         if (!status)
@@ -77,7 +97,6 @@ namespace Alperia_SFO
                         lerrori.Add(status);
                         if (rec.Process__c != "ChangeOffer") {
                             Z1Test.CheckUsageType(rec.UsageType__c, rec.NE__Order_Item__c);
-                            status = Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
                             lerrori.Add(status);
                             Z1Test.CheckTargetMarket(rec.TargetMarket__c, rec.NE__Order_Item__c);
                             short number;
@@ -91,7 +110,8 @@ namespace Alperia_SFO
                         lerrori.Add(status);
                         status = Z1Test.CheckEngine_Code_D__c(rec.Engine_Code_D__c, rec.NE__Order_Item__c);
                         lerrori.Add(status);
-                        Z1Test.CheckCountry__c(rec.BillingCountry__c, rec.NE__Order_Item__c);
+                        status = Z1Test.CheckCountry__c(rec.BillingCountry__c, rec.NE__Order_Item__c);
+                        lerrori.Add(status);
                         Z1Test.CheckCounty__c(rec.BillingProvince__c, rec.NE__Order_Item__c);
                         if (rec.Commodity_Type__c == "ELE")
                         {
@@ -103,6 +123,7 @@ namespace Alperia_SFO
                             Z1Test.CheckB2WU__Tariff_Type_Gas__c(rec.B2WU__Tariff_Type_Gas__c, rec.NE__Order_Item__c);
                             Z1Test.CheckWitdrawal__c(rec.WithdrawalClass__c, rec.NE__Order_Item__c);
                             Z1Test.CheckExciseGas__c(rec.ExciseGas__c, rec.NE__Order_Item__c);
+                            status = Z1Test.CheckUsageCategory(rec.Usage_Category__c, rec.NE__Order_Item__c);
                         };
 
                         //var brec = rec.ToBson();
@@ -128,7 +149,7 @@ namespace Alperia_SFO
                     throw;
                 };
             }
-
+            Log.Information("--------------------------------------");
             Log.Information("Fine programma");
             Console.WriteLine("Fine programma");
             Console.ReadKey();
@@ -143,10 +164,24 @@ namespace Alperia_SFO
             catch (Exception)
             {
 
-                Log.Information("record duplicato {0}", doc.NE__OrderId__c);
+                Log.Information("{0} record duplicato", doc.NE__OrderId__c);
+            }
+        }   
+
+        private static void DelMongoFromFilename(Z1Context ctx, string fname)
+        {
+            Log.Information("Cancellazione righe esecuzioni precedenti");
+            try
+            {
+                ctx.Z1s.DeleteMany(p => p.fileName == fname);
+            }
+            catch (Exception)
+            {
+
+                Log.Error("cancellazione preventiva non riuscita");
             }
             
-        }   
+        }
         //private static List<Z1> ProcessFileInput(string path)
         //{
         //    //return
@@ -156,6 +191,12 @@ namespace Alperia_SFO
         //    //    .Select(Z1.ParseFromCsv)
         //    //    .ToList();
         //}
+    }
+
+    class Uat
+    {
+        public string Scenario { get; set; }
+        public string Pod_pdr { get; set; }
     }
 
 
