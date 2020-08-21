@@ -212,8 +212,8 @@ public class MainEle
         public string MATNR { get; set; }
         public string KEYDATE { get; set; }
         public string APP_BIS { get; set; }
-        public string NCAP_STANZVOR { get; set; }
-        public string NCIR_STANZVOR { get; set; }
+        public int NCAP_STANZVOR { get; set; }
+        public int NCIR_STANZVOR { get; set; }
         public float ZWFAKT_ATT_F0 { get; set; }
         public float ZWFAKT_ATT_F1 { get; set; }
         public float ZWFAKT_ATT_F2 { get; set; }
@@ -304,6 +304,36 @@ public class MainEle
         }
     }
 
+    public string Decode_zmercato(string imerc)
+    {
+        switch (imerc)
+        {
+            case "T":
+                return "MT";
+            case "L":
+                return "ML";
+            default:
+                return null;
+        }
+    }
+
+    public string Decode_grid_id(string iDist)
+    {
+        switch (iDist)
+        {
+            case "AE-EW-EE":
+                return "ZE_D03255";
+            case "EDYNA":
+                return "ZE_D03255";
+            case "SELNET":
+                return "ZE_D01039";
+            case "ENEL-D":
+                return "ZG_D00435";
+            default:
+                return "ZE_D03255";
+        }
+    }
+
     public string Decode_strat(string iBpkind)
     {
         switch (iBpkind)
@@ -314,6 +344,19 @@ public class MainEle
                 return "Z2";
             case "PUAM":
                 return "Z2";
+            default:
+                return null;
+        }
+    }
+
+    public string Decode_zfreq(string ifreq)
+    {
+        switch (ifreq)
+        {
+            case "Mensile":
+                return "MENS";
+            case "Bimestrale":
+                return "BIME";
             default:
                 return null;
         }

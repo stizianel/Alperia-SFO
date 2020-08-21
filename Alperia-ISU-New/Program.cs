@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Runtime.CompilerServices;
 
 namespace Alperia_ISU_New
 {
@@ -79,6 +80,12 @@ namespace Alperia_ISU_New
                 var debit = ldirect.Where(p => p.IBAN__C == bilpro.NE__IBAN__C).FirstOrDefault<DirectDebit>();
                 wMainele.ZMIGBP             = "X";
                 wMainele.ZMIGCC             = "X";
+                wMainele.ZMIGCTR            = "X";
+                wMainele.ZMIGCO             = "X";
+                wMainele.ZMIGINST           = "X";
+                wMainele.ZMIGPOD            = "X";
+                wMainele.ZMIGDEV            = "X";
+                wMainele.ZMIGREA            = "X";
                 wMainele.BU_TYPE            = account.CUSTOMERTYPE__C;
                 wMainele.NAME_FIRST         = account.FIRSTNAME;
                 wMainele.NAME_LAST          = account.LASTNAME;
@@ -160,22 +167,75 @@ namespace Alperia_ISU_New
                 wMainele.ZOGAL_ISTATLOC = service.ASSETISTAT__C.ToString();
 
 
-                wMainele.ZFREQ = asset.BILLINGFREQUENCY__C;
+                wMainele.ZFREQ = wMainele.Decode_zfreq(asset.BILLINGFREQUENCY__C);
                 wMainele.ZTENS = service.VOLTAGE__C.ToString();
                 wMainele.IM_AB = "19500101";
+                wMainele.Z_DISVENDITORE = "X";
+
+                wMainele.OP_EU_STATOF = "Attiva";
                 wMainele.OP_ER_TIPOUT_TF = Decode_tipo_uso(asset.CONTRACTTYPE__C);
                 wMainele.OP_ED_POTDIS = service.AVAILABLEPOWER__C.ToString();
-                wMainele.OP_ED_POTCON = service.APPLIEDPOWER__C.ToString();
+                wMainele.OP_ED_POTCON = service.ENGRAVEDPOWER__C.ToString();
                 wMainele.OP_ER_LIVTEN_TF = service.VOLTAGELEVEL__C;
                 wMainele.OP_ER_RESI_TF = Decode_bool(service.ISRESIDENTATSUPPLY__C);
-                //TODO: OP_ER_OPZAEEG
+                wMainele.OP_ER_OPZAEEG = Decode_opzaeeg(wMainele.OP_ER_TIPOUT_TF, wMainele.OP_ER_RESI_TF, wMainele.OP_ER_LIVTEN_TF);
                 wMainele.EQ_COANC0 = service.ANNUALCONSUMPTION__C.ToString();
+                Tuple<string, string> tarkond = Decode_tarkond(wMainele.OP_ER_TIPOUT_TF, wMainele.OP_ER_RESI_TF, wMainele.OP_ED_POTCON);
+                wMainele.TARIFART_ER_ACC = tarkond.Item1;
+                wMainele.KONDIGR_ER_ACC = tarkond.Item2;
+                wMainele.EF_ESENZAC = "0.0";
+                wMainele.EI_ACCAUFX = "0.0";
+                Tuple<string, string> tarkond_opz = Decode_tarkond_opz(wMainele.OP_ER_OPZAEEG);
+                wMainele.TARIFART_ER_OPZ = tarkond_opz.Item1;
+                wMainele.KONDIGR_ER_OPZ = tarkond_opz.Item2;
+                wMainele.DATE_FROM = "19500101";
+                wMainele.EXT_UI = service.POD__C;
+                wMainele.GRID_ID = wMainele.Decode_grid_id(service.DISTRIBUTOR__C);
 
+                // Dati del misuratore - start
+                wMainele.ZWGRUPPE = "ZLETF0";
+                wMainele.EGERR_INFO = service.REGISTRATIONNUMBER__C;
+                wMainele.MATNR = "ZLETF0";
+                wMainele.KEYDATE = "20190101";
+                wMainele.NCAP_STANZVOR = 9;
+                wMainele.NCIR_STANZVOR = 9;
+                wMainele.ZWFAKT_ATT_F0 = 1.0f;
+                wMainele.ZWFAKT_ATT_F1 = 1.0f;
+                wMainele.ZWFAKT_ATT_F2 = 1.0f;
+                wMainele.ZWFAKT_ATT_F3 = 1.0f;
+                wMainele.ZWFAKT_REA_F0 = 1.0f;
+                wMainele.ZWFAKT_REA_F1 = 1.0f;
+                wMainele.ZWFAKT_REA_F2 = 1.0f;
+                wMainele.ZWFAKT_REA_F3 = 1.0f;
+                wMainele.ZWFAKT_POT_F0 = 1.0f;
+                wMainele.ZWFAKT_POT_F1 = 1.0f;
+                wMainele.ZWFAKT_POT_F2 = 1.0f;
+                wMainele.ZWFAKT_POT_F3 = 1.0f;
+                wMainele.NCPP_STANZVOR = 9;
+                wMainele.EADAT = "20190101";
+                // Dati del misuratore - end
 
+                wMainele.EINZDAT = asset.NE__STARTDATE__C.ToString();
+                wMainele.AUSZDAT = asset.NE__ENDDATE__C.ToString();
+                wMainele.Z_MERCATO = wMainele.Decode_zmercato(asset.MARKETTYPE__C);
+                wMainele.BUKRS = "12";
+                wMainele.SPARTE = "E";
+                wMainele.GEMFAKT = asset.INVOICEJOINTTYPE__C.ToString();
+                wMainele.COKEY = Decode_cokey(wMainele.Z_MERCATO, wMainele.OP_ER_TIPOUT_TF);
+                wMainele.KOFIZ = wMainele.CA_KOFIZ;
+                wMainele.ZCANACQ = Decode_zcanacq(asset.CHANNEL__C);
+                wMainele.ZTIP_OFF = Decode_ztipoff(wMainele.Z_MERCATO);
                 wMainele.Z_PRODOTTO = asset.NAME;
                 wMainele.Z_PRODOTTO_DESC = asset.PRODUCTDESCRIPTION__C;
                 wMainele.Z_INIZIO = "20190101";
                 wMainele.Z_FINE = "99991231";
+                // dati della lettura
+
+                wMainele.RLEA_PREL_F0 = "0.0";
+                wMainele.RLREA_PREL_F0 = "0.0";
+                wMainele.RLPOT_PREL_F0 = "0.0";
+
+
                 lmainele.Add(wMainele);
                 InsMongoSingle(wMainele, ctx);
 
@@ -189,6 +249,124 @@ namespace Alperia_ISU_New
             Console.ReadKey();
             }
 
+        private static string Decode_zcanacq(string CHANNEL)
+        {
+           if (CHANNEL == "ENGYP")
+            {
+                return "SP";
+            } else
+            {
+                return "EC";
+            }
+        }
+
+        private static string Decode_ztipoff(string MERCATO)
+        {
+            if (MERCATO == "MT")
+            {
+                return "B2C";
+            } else
+            {
+                return "B2B";
+            }
+        }
+
+        private static string Decode_cokey(string MERCATO, string TIPOUT)
+        {
+            if (MERCATO == "MT" && TIPOUT == "DO") 
+            {
+                return "E_1T011";
+            } else if (MERCATO == "MT" && (TIPOUT == "AU" || TIPOUT == "IP"))
+            {
+                return "E_1T012";
+            } else if (MERCATO == "ML" && TIPOUT == "DO")
+            {
+                return "E_1L011";
+            }
+            else if (MERCATO == "ML" && (TIPOUT == "AU" || TIPOUT == "IP"))
+            {
+                return "E_1L012";
+            } else
+            {
+                return "E_1L060";
+            }
+        }
+
+        private static Tuple<string, string> Decode_tarkond_opz(string OPZAEEG)
+        {
+            if (OPZAEEG == "TDR")
+            {
+                return new Tuple<string, string>("E_TDR", "TDR");
+            } else if (OPZAEEG == "TDNR")
+            {
+                return new Tuple<string, string>("E_TDNR", "TDNR");
+            } else if (OPZAEEG == "BTA1")
+            {
+                return new Tuple<string, string>("E_BTA1", "BTA1");
+            } else if (OPZAEEG == "BTIP")
+            {
+                return new Tuple<string, string>("E_BTIP", "BTIP");
+            } else if (OPZAEEG == "MTIP")
+            {
+                return new Tuple<string, string>("E_MTIP", "MTIP");
+            }
+            else
+            {
+                return new Tuple<string, string>("E_AAT1", "AAT1");
+            }
+        }
+
+        private static Tuple<string, string> Decode_tarkond(string TIPOUT, string RESI, string POTCON)
+        {
+            if(TIPOUT == "DO" && RESI == null)
+            {
+                return new Tuple<string, string>("E_ACDM", "ACCDNR");
+            } else if (TIPOUT == "DO" && RESI == "X")
+            {
+                return new Tuple<string, string>("E_ACDM", "ACCDR2");
+            } else if (TIPOUT == "IP")
+            {
+                return new Tuple<string, string>("E_ACAU", "ORD");
+            }
+            else
+            {
+                return new Tuple<string, string>("E_ACAU", "ORD");
+            }
+        }
+
+        private static string Decode_opzaeeg(string TIPOUT, string RESI, string LIVTEN)
+        {
+            if (TIPOUT == "DO")
+            {
+                if (RESI == "X")
+                {
+                    return "TDR";
+                } else
+                {
+                    return "TDNR";
+                }
+            }
+            else if (TIPOUT == "IP" && LIVTEN == "BT")
+            {
+                return "BTIP";
+            }
+            else if (TIPOUT == "IP" && LIVTEN == "MT")
+            {
+                return "MTIP";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "BT")
+            {
+                return "BTA1";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "MT")
+            {
+                return "MTA1";
+            }
+            else
+            {
+                return "AAT1";
+            }
+        } 
 
         private static void InsMongoSingle(MainEle doc, MainEleContext ctx)
         {
