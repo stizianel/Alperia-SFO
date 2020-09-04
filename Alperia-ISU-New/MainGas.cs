@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Permissions;
 using MongoDB.Driver;
 
-public class MainEle
+public class MainGas
 {
         public string SRC_SYSTEM { get; set; }
         public string RUN_ID { get; set; }
@@ -20,7 +20,6 @@ public class MainEle
         public string CRM_PARTNER { get; set; }
         public string CRM_ACCOUNT { get; set; }
         public string CRM_CONTRATTO { get; set; }
-        public string CRM_IMPIANTO { get; set; }
         public string TIPO_OPERAZIONE { get; set; }
         public string BU_TYPE { get; set; }
         public string NAME_FIRST { get; set; }
@@ -87,7 +86,6 @@ public class MainEle
         public string TEL_NUMBER4 { get; set; }
         public string TEL_NUMBER5 { get; set; }
         public string TEL_MOBILE { get; set; }
-        public string Z_TEL_NUMBER { get; set; }
         public string BANKS { get; set; }
         public string BANKL { get; set; }
         public string BANKN { get; set; }
@@ -108,6 +106,7 @@ public class MainEle
         public string ZGRUPIVA { get; set; }
         public string ZAB_GR_IVA { get; set; }
         public string ZBIS_GR_IVA { get; set; }
+        public string FDGRP { get; set; }
         public string VKONA { get; set; }
         public string VBUND { get; set; }
         public string OPBUK { get; set; }
@@ -119,6 +118,7 @@ public class MainEle
         public string CA_KOFIZ { get; set; }
         public string Z_MODINV { get; set; }
         public string Z_SINTDETT { get; set; }
+        public string Z_DUALCODE { get; set; }
         public string Z_CODDES { get; set; }
         public string IPA_CODE { get; set; }
         public string IPA_BEGDA { get; set; }
@@ -167,44 +167,38 @@ public class MainEle
         public string ZTIF { get; set; }
         public string ZFREQ { get; set; }
         public string IM_AB { get; set; }
-        public string IM_SPEBENE { get; set; }
         public string Z_DISVENDITORE { get; set; }
+        public string SERVICE { get; set; }
         public string BRANCHE { get; set; }
+        public string Z_POSA { get; set; }
         public string Z_CUTOFF { get; set; }
         public string Z_ULTFATT { get; set; }
         public string Z_TPULTFATT { get; set; }
-        public string ZTENS { get; set; }
-        public string OP_EU_STATOF { get; set; }
-        public string OP_ER_TIPOUT_TF { get; set; }
-        public string OP_ED_POTDIS { get; set; }
-        public string OP_ED_POTCON { get; set; }
-        public string OP_ER_LIVTEN_TF { get; set; }
-        public string OP_ER_RESI_TF { get; set; }
-        public string OP_ER_OPZAEEG { get; set; }
-        public string EQ_COANC0 { get; set; }
-        public string EQ_COAND0 { get; set; }
-        public string EQ_COAND1 { get; set; }
-        public string EQ_COAND2 { get; set; }
-        public string EQ_COAND3 { get; set; }
-        public string OP_EG_DISDIS { get; set; }
-        public string OP_EG_INTPRO { get; set; }
-        public string OP_EG_MISLIM { get; set; }
-        public string OP_EG_CIVET { get; set; }
-        public string OP_EG_ENERG { get; set; }
-        public string OP_EG_AUSIL { get; set; }
-        public string OP_EG_DOMD1 { get; set; }
-        public string Z_MISGTW { get; set; }
-        public string OP_EG_MIS2G { get; set; }
-        public string DATA_2G { get; set; }
-        public string OP_EU_CLESEN { get; set; }
-        public string CODICE_ACCISE { get; set; }
-        public string TARIFART_ER_ACC { get; set; }
-        public string KONDIGR_ER_ACC { get; set; }
-        public string EF_ESENZAC { get; set; }
-        public string EI_ACCAUFX { get; set; }
-        public string TARIFART_ER_OPZ { get; set; }
-        public string KONDIGR_ER_OPZ { get; set; }
+        public string ZZONA_CLIMA { get; set; }
+    public string OP_GU_CATUSO { get; set; }
+    public string OP_GU_STATOF { get; set; }
+        public string OP_GU_CLAPRE { get; set; }
+        public string OP_GU_AAEG { get; set; }
+        public string OP_GQ_PROGAN { get; set; }
+        public string OP_GF_COEFFC { get; set; }
+        public string OP_GR_TIPPDR { get; set; }
+        public string OP_GR_COREMI_1 { get; set; }
+        public string OP_GR_COREMI_2 { get; set; }
+        public string OP_GU_CLAMIS { get; set; }
+        public string GU_CLIMP { get; set; }
+        public string GU_COANC0 { get; set; }
+        public string GU_COANDI { get; set; }
+        public string OP_GG_DISDIS { get; set; }
+        public string OP_GF_PCSZERO { get; set; }
+        public string OP_GG_CIVET { get; set; }
+        public string OP_GR_COL_TF { get; set; }
+        public string OP_GR_COL_GR { get; set; }
+        public string CASSA_MEZZOGIORNO { get; set; }
+        public string OP_GG_MISGIOR { get; set; }
+        public string OP_GG_DIRETTO { get; set; }
         public string IMPIANTO_OLD { get; set; }
+        public string OP_GG_ACCMIS { get; set; }
+        public string VA_GF_CG { get; set; }
         public string DATE_FROM { get; set; }
         public string EXT_UI { get; set; }
         public string GRID_ID { get; set; }
@@ -214,37 +208,13 @@ public class MainEle
         public string KEYDATE { get; set; }
         public string APP_BIS { get; set; }
         public int NCAP_STANZVOR { get; set; }
-        public int NCIR_STANZVOR { get; set; }
-        public float ZWFAKT_ATT_F0 { get; set; }
-        public float ZWFAKT_ATT_F1 { get; set; }
-        public float ZWFAKT_ATT_F2 { get; set; }
-        public float ZWFAKT_ATT_F3 { get; set; }
-        public float ZWFAKT_REA_F0 { get; set; }
-        public float ZWFAKT_REA_F1{ get; set; }
-        public float ZWFAKT_REA_F2 { get; set; }
-        public float ZWFAKT_REA_F3 { get; set; }
-        public float ZWFAKT_POT_F0 { get; set; }
-        public float ZWFAKT_POT_F1 { get; set; }
-        public float ZWFAKT_POT_F2 { get; set; }
-        public float ZWFAKT_POT_F3 { get; set; }
-        public int NCPP_STANZVOR { get; set; }
-        public string EADAT { get; set; }
-        public string FLAG_ATTF0 { get; set; }
-        public string FLAG_ATTF1 { get; set; }
-        public string FLAG_ATTF2 { get; set; }
-        public string FLAG_ATTF3 { get; set; }
-        public string FLAG_REAF0 { get; set; }
-        public string FLAG_REAF1 { get; set; }
-        public string FLAG_REAF2 { get; set; }
-        public string FLAG_REAF3 { get; set; }
-        public string FLAG_POTF0 { get; set; }
-        public string FLAG_POTF1 { get; set; }
-        public string FLAG_POTF2 { get; set; }
-        public string FLAG_POTF3 { get; set; }
-        public string FLAG_EDMAT { get; set; }
-        public string FLAG_EDMRT { get; set; }
-        public int NEDMAT_STANZVOR { get; set; }
-        public int NEDMRE_STANZVOR { get; set; }
+        public float ZWFAKT_MIS { get; set; }      
+        public string EADAT_MIS { get; set; }
+        public int NCAP_STANZVOR_CF1 { get; set; }
+        public string ZWFAKT_CORF1 { get; set; }
+        public int NCAP_STANZVOR_F2 { get; set; }
+        public string ZWFAKT_CORF2 { get; set; }
+        public string EADAT_COR { get; set; }
         public string EINZDAT { get; set; }
         public string AUSZDAT { get; set; }
         public string Z_MERCATO { get; set; }
@@ -255,6 +225,7 @@ public class MainEle
         public string GEMFAKT { get; set; }
         public string ABRSPERR { get; set; }
         public string COKEY { get; set; }
+        public string BUPLA { get; set; }
         public string KOFIZ { get; set; }
         public string ZCANACQ { get; set; }
         public string Z_KAM { get; set; }
@@ -266,7 +237,6 @@ public class MainEle
         public string Z_LISTINO { get; set; }
         public string Z_DEPOSITO { get; set; }
         public string ZIMP_DEPOSITO { get; set; }
-        public string Z_TIPODEP { get; set; }
         public string Z_OFF_VERDE  { get; set; }
         public string Z_MOT_CESS { get; set; }
         public string Z_MOT_ATT { get; set; }
@@ -275,20 +245,14 @@ public class MainEle
         public string Z_CIG { get; set; }
         public string Z_CIG_FIGLIO { get; set; }
         public string Z_NOTE { get; set; }
-        public string RLEA_PREL_F0 { get; set; }
-        public string RLEA_PREL_F1 { get; set; }
-        public string RLEA_PREL_F2 { get; set; }
-        public string RLEA_PREL_F3 { get; set; }
-        public string RLREA_PREL_F0 { get; set; }
-        public string RLREA_PREL_F1{ get; set; }
-        public string RLREA_PREL_F2 { get; set; }
-        public string RLREA_PREL_F3 { get; set; }
-        public string RLPOT_PREL_F0 { get; set; }
-        public string RLPOT_PREL_F1 { get; set; }
-        public string RLPOT_PREL_F2 { get; set; }
-        public string RLPOT_PREL_F3 { get; set; }
+        public string RLEA_MIS { get; set; }
         public string REA_ADAT { get; set; }
         public string REA_ISTABLART { get; set; }
+        public string RLEA_COR_F1 { get; set; }
+        public string RLEA_COR_F2 { get; set; }
+        public string REA_ADAT_COR { get; set; }
+        public string REA_ISTABLART_COR { get; set; }
+        public string ZEGERR_INFO { get; set; }
 
     public string Decode_bpkind(string iBpkind)
     {
@@ -377,17 +341,17 @@ public class MainEle
     }
 }
 
-public class MainEleContext
+public class MainGasContext
 {
     private readonly IMongoDatabase _db;
 
-    public MainEleContext()
+    public MainGasContext()
     {
         MongoClient client = new MongoClient();
         _db = client.GetDatabase("Alperia");
-        _db.GetCollection<MainEle>("MainEle");
+        _db.GetCollection<MainGas>("MainGas");
     }
 
-    public IMongoCollection<MainEle> MainEleCollection => _db.GetCollection<MainEle>("MainEle");
+    public IMongoCollection<MainGas> MainEleCollection => _db.GetCollection<MainGas>("MainGas");
 }
 

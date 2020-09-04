@@ -35,15 +35,15 @@ public class BillingProfile
     public string IOUCODE__C { get; set; }
     public string CONSIP__C { get; set; }
     public string PAYMENTMETHOD__C { get; set; }
-    public int? CODESDI__C { get; set; }
+    public string CODESDI__C { get; set; }
     public string BILLINGPEC__C { get; set; }
     public string ISDIFFERENTSUBSCRIBER__C { get; set; }
     public string APPLICANTFIRSTNAME__C { get; set; }
     public string APPLICANTFISCALCODE__C { get; set; }
     public string APPLICANTFULLNAME__C { get; set; }
     public string APPLICANTLASTNAME__C { get; set; }
-    public int? BANKCODE__C { get; set; }
-    public int? BRANCHCODE__C { get; set; }
+    public string BANKCODE__C { get; set; }
+    public string BRANCHCODE__C { get; set; }
     public string BANKNAME__C { get; set; }
     public string CFSIGNATUREALLOWED__C { get; set; }
     public string CIN__C { get; set; }

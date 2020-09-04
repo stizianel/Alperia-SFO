@@ -13,9 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Assett.cs = Assett.cs
 		BillingProfile.cs = BillingProfile.cs
 		DirectDebit.cs = DirectDebit.cs
-		MainEle.cs = MainEle.cs
 		MigKeys.cs = MigKeys.cs
 		ServicePoint.cs = ServicePoint.cs
+		Zmapping.cs = Zmapping.cs
+		Zprodotti.cs = Zprodotti.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alperia-ISU-New", "Alperia-ISU-New\Alperia-ISU-New.csproj", "{3395EA0E-D403-407A-8019-4C451F513A19}"

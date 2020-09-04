@@ -60,12 +60,12 @@ public class ServicePoint
     public string BUILDINGTYPE__C { get; set; }
     public string CADASTRALCITY__C { get; set; }
     public string CADASTRALPROVINCE__C { get; set; }
-    public int? CADASTRALCODE__C { get; set; }
+    public string CADASTRALCODE__C { get; set; }
     public string URBANSECTION__C { get; set; }
-    public int? SHEET__C { get; set; }
-    public int? SUBORDINATE__C { get; set; }
-    public int? PARCEL__C { get; set; }
-    public int? PARCELEXTENSION__C { get; set; }
+    public string SHEET__C { get; set; }
+    public string SUBORDINATE__C { get; set; }
+    public string PARCEL__C { get; set; }
+    public string PARCELEXTENSION__C { get; set; }
     public string PARCELTYPE__C { get; set; }
     public string ENROLLMENTLEVEL__C { get; set; }
     public string PROPERTYUSAGE__C { get; set; }

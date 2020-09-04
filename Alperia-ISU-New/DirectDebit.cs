@@ -6,7 +6,7 @@ public class DirectDebit
     public string RUN_ID { get; set; }
     public int ROW_ID { get; set; }
     public string IBAN__C { get; set; }
-    public int? APPLICANTVAT__C { get; set; }
+    public string APPLICANTVAT__C { get; set; }
     public int APPLICANTFISCALCODE__C { get; set; }
     public string STATUS__C { get; set; }
     public string CUCSIA__C { get; set; }

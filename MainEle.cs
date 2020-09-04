@@ -197,7 +197,7 @@ public class MainEle
         public string OP_ER_TIPOUT_TF { get; set; }
         public string OP_ED_POTDIS { get; set; }
         public string OP_ED_POTCON { get; set; }
-        public string OP_ER_LIVTEN_TF { get; set; }
+        public string OP_ER_LIVTEN_TF { get; set; } 
         public string OP_ER_RESI_TF { get; set; }
         public string OP_ER_OPZAEEG { get; set; }
         public string EQ_COANC0 { get; set; }
@@ -213,6 +213,7 @@ public class MainEle
         public string OP_EG_AUSIL { get; set; }
         public string OP_EG_DOMD1 { get; set; }
         public string Z_MISGTW { get; set; }
+        public string OP_EG_MIS2G { get; set; }
         public string DATA_2G { get; set; }
         public string OP_EU_CLESEN { get; set; }
         public string CODICE_ACCISE { get; set; }
@@ -273,7 +274,6 @@ public class MainEle
         public string GEMFAKT { get; set; }
         public string ABRSPERR { get; set; }
         public string COKEY { get; set; }
-        public string BUPLA { get; set; }
         public string KOFIZ { get; set; }
         public string ZCANACQ { get; set; }
         public string Z_KAM { get; set; }

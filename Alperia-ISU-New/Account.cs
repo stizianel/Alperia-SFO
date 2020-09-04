@@ -25,9 +25,9 @@ public class Account
         public string DIVISION__C { get; set; }
         public string CUSTOMERTYPE__C { get; set; }
         public string NE__FISCAL_CODE__C { get; set; }
-        public int? NE__VAT__C { get; set; }
+        public string NE__VAT__C { get; set; }
         public string RETURNMARKET__C { get; set; }
-        public int? PHONE { get; set; }
+        public string PHONE { get; set; }
         public string PHONEBUSINESS__C { get; set; }
         public string PERSONMOBILEPHONE { get; set; }
         public string MOBILEBUSINESS__C { get; set; }

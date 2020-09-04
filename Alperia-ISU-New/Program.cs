@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using Alperia_SFO;
+using CsvHelper;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,23 @@ namespace Alperia_ISU_New
             var csvOut = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csvOut.Configuration.Delimiter = ";";
 
+            var wfConfComm = new StreamWriter("E:\\work\\Alperia\\ConfComm.csv");
+            var csvConfComm = new CsvWriter(wfConfComm, CultureInfo.InvariantCulture);
+            csvConfComm.Configuration.Delimiter = ";";
+            int wRownum = 0;
+
+            var readerProdotti = new StreamReader("E:\\work\\Alperia\\comp-codProd-codcomp.csv");
+            var csvProd = new CsvReader(readerProdotti, CultureInfo.InvariantCulture);
+            csvProd.Configuration.Delimiter = ";";
+            var lprodotti = new List<Zprodotti>();
+            lprodotti = ProcessProdotti(csvProd);
+
+            var readerMapping = new StreamReader("E:\\work\\Alperia\\mapping.csv");
+            var csvMap = new CsvReader(readerMapping, CultureInfo.InvariantCulture);
+            csvMap.Configuration.Delimiter = ";";
+            var lmapping = new List<Zmapping>();
+            lmapping = ProcessMapping(csvMap);
+
             string[] fileEntries = Directory.GetFiles(targetDirectory);
             var laccounts = new List<Account>();
             var lassets = new List<Assett>();
@@ -34,6 +52,7 @@ namespace Alperia_ISU_New
             var lservice = new List<ServicePoint>();
             var ldirect = new List<DirectDebit>();
             List<MainEle> lmainele = new List<MainEle>();
+            List<ConfComm> lmainConf = new List<ConfComm>();
 
             var ctx = new MainEleContext();
 
@@ -78,14 +97,17 @@ namespace Alperia_ISU_New
                 var bilpro = lbillings.Where(p => p.ZAPPKEYCONTRACTACCOUNT__C == asset.NE__BILLINGPROF__C).First();
                 var service = lservice.Where(p => p.ZAPPKEYPLANT__C == asset.NE__SERVICE_POINT__C).First();
                 var debit = ldirect.Where(p => p.IBAN__C == bilpro.NE__IBAN__C).FirstOrDefault<DirectDebit>();
-                wMainele.ZMIGBP             = "X";
-                wMainele.ZMIGCC             = "X";
-                wMainele.ZMIGCTR            = "X";
-                wMainele.ZMIGCO             = "X";
-                wMainele.ZMIGINST           = "X";
-                wMainele.ZMIGPOD            = "X";
-                wMainele.ZMIGDEV            = "X";
-                wMainele.ZMIGREA            = "X";
+                wMainele.SRC_SYSTEM = asset.SRC_SYSTEM;
+                wMainele.ROW_ID = asset.ROW_ID;
+                wMainele.RUN_ID = asset.RUN_ID;
+                wMainele.ZMIGBP             = "1";
+                wMainele.ZMIGCC             = "1";
+                wMainele.ZMIGCTR            = "1";
+                wMainele.ZMIGCO             = "1";
+                wMainele.ZMIGINST           = "1";
+                wMainele.ZMIGPOD            = "1";
+                wMainele.ZMIGDEV            = "1";
+                wMainele.ZMIGREA            = "1";
                 wMainele.BU_TYPE            = account.CUSTOMERTYPE__C;
                 wMainele.NAME_FIRST         = account.FIRSTNAME;
                 wMainele.NAME_LAST          = account.LASTNAME;
@@ -142,7 +164,6 @@ namespace Alperia_ISU_New
                     wMainele.EZAWE = "S";
                 }
 
-                wMainele.FDGRP = null;
                 wMainele.OPBUK = "12";
                 wMainele.STDBK = "12";
                 wMainele.IKEY = "Z3";
@@ -200,17 +221,17 @@ namespace Alperia_ISU_New
                 wMainele.NCAP_STANZVOR = 9;
                 wMainele.NCIR_STANZVOR = 9;
                 wMainele.ZWFAKT_ATT_F0 = 1.0f;
-                wMainele.ZWFAKT_ATT_F1 = 1.0f;
-                wMainele.ZWFAKT_ATT_F2 = 1.0f;
-                wMainele.ZWFAKT_ATT_F3 = 1.0f;
+                //wMainele.ZWFAKT_ATT_F1 = 1.0f;
+                //wMainele.ZWFAKT_ATT_F2 = 1.0f;
+                //wMainele.ZWFAKT_ATT_F3 = 1.0f;
                 wMainele.ZWFAKT_REA_F0 = 1.0f;
-                wMainele.ZWFAKT_REA_F1 = 1.0f;
-                wMainele.ZWFAKT_REA_F2 = 1.0f;
-                wMainele.ZWFAKT_REA_F3 = 1.0f;
+                //wMainele.ZWFAKT_REA_F1 = 1.0f;
+                //wMainele.ZWFAKT_REA_F2 = 1.0f;
+                //wMainele.ZWFAKT_REA_F3 = 1.0f;
                 wMainele.ZWFAKT_POT_F0 = 1.0f;
-                wMainele.ZWFAKT_POT_F1 = 1.0f;
-                wMainele.ZWFAKT_POT_F2 = 1.0f;
-                wMainele.ZWFAKT_POT_F3 = 1.0f;
+                //wMainele.ZWFAKT_POT_F1 = 1.0f;
+                //wMainele.ZWFAKT_POT_F2 = 1.0f;
+                //wMainele.ZWFAKT_POT_F3 = 1.0f;
                 wMainele.NCPP_STANZVOR = 9;
                 wMainele.EADAT = "20190101";
                 // Dati del misuratore - end
@@ -238,16 +259,68 @@ namespace Alperia_ISU_New
 
                 lmainele.Add(wMainele);
                 InsMongoSingle(wMainele, ctx);
+                var lwConfComm = CreaConfComm(asset, lprodotti, lmapping);
+                foreach (var conf in lwConfComm)
+                {
+                    conf.Row_id = wRownum;
+                    lmainConf.Add(conf);
+                    wRownum += 1;
+                }
 
             }
 
             csvOut.WriteRecords<MainEle>(lmainele);
+            csvConfComm.WriteRecords<ConfComm>(lmainConf);
+        
 
             Log.Information("--------------------------------------");
             writer.Close();
+            wfConfComm.Close();
             Console.WriteLine("Fine programma");
             Console.ReadKey();
             }
+
+        private static List<ConfComm> CreaConfComm(Assett asset, List<Zprodotti> lprodotti, List<Zmapping> lmapping)
+        {
+            List<ConfComm> wlconf = new List<ConfComm>();
+            Log.Information("crea conf comm");
+            Log.Information($"Prodotto {asset.PRICE_LIST_CODE_D__C}");
+            var iprodotto = asset.PRICE_LIST_CODE_D__C;
+            var lcomp = lprodotti.Where(p => p.CodProd == iprodotto).ToList();
+            foreach (var comp in lcomp)
+            {
+                var lmap = lmapping.Where(m => m.CodComp == comp.CodComp).ToList();
+                foreach (var map in lmap)
+                {
+                    var conf = new ConfComm();
+                    conf.Ext_ui = asset.PODPDRPDC__C;
+                    conf.Ab = "20200101";
+                    conf.Bis = "99991231";
+                    conf.Cod_componente = comp.CodComp;
+                    conf.Campo = map.Operando;
+                    conf.Valore = CalcolaValore(map);
+                    wlconf.Add(conf);
+
+                }
+            }
+            return wlconf;
+
+        }
+
+        private static string CalcolaValore(Zmapping map)
+        {
+            if (map.TypOperando == "CHAR" && map.LenOperando == "1")
+            {
+                return "X";
+            } else if (map.TypOperando == "CHAR" && map.LenOperando == "10")
+            {
+                return map.CostValue;
+            }
+            else
+            {
+                return "0.0";
+            }
+        }
 
         private static string Decode_zcanacq(string CHANNEL)
         {
@@ -451,6 +524,34 @@ namespace Alperia_ISU_New
                 return iban.Substring(4, 1);
             }
             return null;
+        }
+
+        private static List<Zprodotti> ProcessProdotti(CsvReader csv)
+        {
+            try
+            {
+                var zprodotti = csv.GetRecords<Zprodotti>().ToList();
+                return zprodotti;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Errore su file {0}", "Zprodotti");
+                throw;
+            }
+        }
+
+        private static List<Zmapping> ProcessMapping(CsvReader csv)
+        {
+            try
+            {
+                var zmapping = csv.GetRecords<Zmapping>().ToList();
+                return zmapping;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Errore su file {0}", "Zmapping");
+                throw;
+            }
         }
 
         private static List<Account> ProcessAccounts(CsvReader csv)
