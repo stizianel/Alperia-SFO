@@ -30,7 +30,7 @@ public class BillingProfile
     public string SHIPPINGMETHOD__C { get; set; }
     public string INVOICEDETAILTYPE__C { get; set; }
     public string IPACODE__C { get; set; }
-    public int IPASTARTDATE__C { get; set; }
+    public string IPASTARTDATE__C { get; set; }
     public string OUCODE__C { get; set; }
     public string IOUCODE__C { get; set; }
     public string CONSIP__C { get; set; }

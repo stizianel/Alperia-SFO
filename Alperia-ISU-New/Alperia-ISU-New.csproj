@@ -139,6 +139,7 @@
     <Compile Include="ServicePoint.cs" />
     <Compile Include="Zmapping.cs" />
     <Compile Include="Zprodotti.cs" />
+    <Compile Include="ZsfReconKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

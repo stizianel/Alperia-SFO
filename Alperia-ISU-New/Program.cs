@@ -1,5 +1,6 @@
 ﻿using Alperia_SFO;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 
 namespace Alperia_ISU_New
 {
@@ -44,6 +46,14 @@ namespace Alperia_ISU_New
             csvMap.Configuration.Delimiter = ";";
             var lmapping = new List<Zmapping>();
             lmapping = ProcessMapping(csvMap);
+
+            var readerSfdc = new StreamReader("E:\\work\\Alperia\\zsf_recon_key.txt");
+            var sfdcMap = new CsvReader(readerSfdc, CultureInfo.InvariantCulture);
+            sfdcMap.Configuration.Delimiter = "|";
+            sfdcMap.Configuration.HasHeaderRecord = false;
+            sfdcMap.Configuration.TrimOptions = TrimOptions.Trim;
+            var lsfdc = new List<ZsfReconKey>();
+            lsfdc = ProcessSfdc(sfdcMap);
 
             string[] fileEntries = Directory.GetFiles(targetDirectory);
             var laccounts = new List<Account>();
@@ -108,10 +118,19 @@ namespace Alperia_ISU_New
                 wMainele.ZMIGPOD            = "1";
                 wMainele.ZMIGDEV            = "1";
                 wMainele.ZMIGREA            = "1";
-                wMainele.BU_TYPE            = account.CUSTOMERTYPE__C;
+
+                wMainele.CRM_PARTNER = lsfdc.Where(p => p.Isukey == account.ZAPPKEYBUSINESSPARTNER__C && p.Sfobj == "ACCOUNT").FirstOrDefault().Sfkey;
+                wMainele.CRM_ACCOUNT = lsfdc.Where(p => p.Isukey == bilpro.ZAPPKEYCONTRACTACCOUNT__C && p.Sfobj == "BILLING_CA").FirstOrDefault().Sfkey;
+                wMainele.CRM_CONTRATTO = lsfdc.Where(p => p.Isukey == asset.ZAPPKEYCONTRACT__C && p.Sfobj == "ASSET").FirstOrDefault().Sfkey;
+                wMainele.CRM_IMPIANTO = lsfdc.Where(p => p.Isukey == service.ZAPPKEYPLANT__C && p.Sfobj == "SRV_POINT").FirstOrDefault().Sfkey;
+
+                wMainele.TIPO_OPERAZIONE = "MOVE_IN";
+                wMainele.BU_TYPE            = Decode_butype(account.CUSTOMERTYPE__C);
                 wMainele.NAME_FIRST         = account.FIRSTNAME;
                 wMainele.NAME_LAST          = account.LASTNAME;
-                wMainele.NAME_ORG1          = account.NAME;
+                (string primo, string secondo) = SplitName(account.NAME);
+                wMainele.NAME_ORG1          = primo;
+                wMainele.NAME_ORG2          = secondo;
                 wMainele.LEGAL_ENTY         = account.Z_ACC_LEGAL_FORM__C;
                 wMainele.CITY1_ESAZ         = bilpro.SHIPPINGCITY__C;
                 wMainele.COUNTRY_ESAZ       = decode_country(bilpro.SHIPPINGCOUNTRY__C);
@@ -120,13 +139,15 @@ namespace Alperia_ISU_New
                 wMainele.POST_CODE1_ESAZ    = bilpro.SHIPPINGPOSTALCODE__C.ToString();
                 wMainele.REGION_ESAZ        = bilpro.SHIPPINGPROVINCE__C;
                 wMainele.STREET_ESAZ        = bilpro.SHIPPINGSTREETNAME__C;
+                wMainele.ZBP_ISTATLOC = bilpro.SHIPPINGISTAT__C.ToString("000000");
+              
                 wMainele.CITY1_CLIENTE      = account.BILLINGCITY;
                 wMainele.COUNTRY_CLIENTE    = decode_country(account.BILLINGCOUNTRY);
                 wMainele.HOUSE_NUM1_CLIENTE = account.BILLINGSTREETNUMBER__C;
                 wMainele.POST_CODE1_CLIENTE = account.BILLINGPOSTALCODE.ToString();
                 wMainele.REGION_CLIENTE     = account.BILLINGSTATE;
                 wMainele.STREET_CLIENTE     = account.BILLINGSTREET;
-                wMainele.ZBP_ISTATLOC_CLIENTE = account.BILLINGISTAT__C.ToString();
+                wMainele.ZBP_ISTATLOC_CLIENTE = account.BILLINGISTAT__C.ToString("000000");
                 wMainele.BPEXT              = account.ZAPPKEYBUSINESSPARTNER__C;
                 wMainele.AUGRP              = "12"; 
                 wMainele.BPKIND             = wMainele.Decode_bpkind(account.CUSTOMERTYPE__C);
@@ -164,17 +185,27 @@ namespace Alperia_ISU_New
                     wMainele.EZAWE = "S";
                 }
 
+                wMainele.VKONA = bilpro.ZAPPKEYCONTRACTACCOUNT__C;
                 wMainele.OPBUK = "12";
                 wMainele.STDBK = "12";
                 wMainele.IKEY = "Z3";
                 wMainele.ZAHLKOND = "CM30";
-                wMainele.CA_KOFIZ = asset.VATRATE__C.ToString();
-                wMainele.Z_MODINV = wMainele.Decode_zmodiv(bilpro.SHIPPINGMETHOD__C);
+                wMainele.CA_KOFIZ = asset.VATRATE__C.ToString("00");
+                wMainele.Z_MODINV = wMainele.Decode_zmodiv(bilpro.SHIPPINGMETHOD__C, wMainele.BPKIND);
                 wMainele.Z_SINTDETT = "D";
-                wMainele.Z_CODDES = bilpro.CODESDI__C.ToString();
-                wMainele.IPA_CODE = bilpro.IPACODE__C.ToString();
-                wMainele.IPA_BEGDA = bilpro.IPASTARTDATE__C.ToString();
-                wMainele.Z_OU = "ND";
+                if (string.IsNullOrEmpty(bilpro.CODESDI__C))
+                {
+                    wMainele.Z_CODDES = "0000000";
+                } else
+                {
+                    wMainele.Z_CODDES = bilpro.CODESDI__C;
+                }
+                if (wMainele.BPKIND == "Z005")
+                {
+                    wMainele.IPA_CODE = bilpro.IPACODE__C;
+                    wMainele.IPA_BEGDA = DecodeDate(bilpro.IPASTARTDATE__C);
+                }
+                
                 wMainele.STRAT = wMainele.Decode_strat(account.CUSTOMERTYPE__C);
                 
 
@@ -185,57 +216,65 @@ namespace Alperia_ISU_New
                 wMainele.POST_CODE1_FORN = service.NE__POSTAL_CODE__C.ToString();
                 wMainele.REGION_FORN = service.NE__PROVINCE__C;
                 wMainele.STREET_FORN = service.NE__STREET__C;
-                wMainele.ZOGAL_ISTATLOC = service.ASSETISTAT__C.ToString();
+                wMainele.ZOGAL_ISTATLOC = service.ASSETISTAT__C.ToString("000000");
 
 
                 wMainele.ZFREQ = wMainele.Decode_zfreq(asset.BILLINGFREQUENCY__C);
                 wMainele.ZTENS = service.VOLTAGE__C.ToString();
                 wMainele.IM_AB = "19500101";
+                wMainele.IM_SPEBENE = DecodeSpebene(wMainele.OP_ER_LIVTEN_TF);
                 wMainele.Z_DISVENDITORE = "X";
+                wMainele.Z_CUTOFF = "20201231";
 
                 wMainele.OP_EU_STATOF = "Attiva";
                 wMainele.OP_ER_TIPOUT_TF = Decode_tipo_uso(asset.CONTRACTTYPE__C);
-                wMainele.OP_ED_POTDIS = service.AVAILABLEPOWER__C.ToString();
-                wMainele.OP_ED_POTCON = service.ENGRAVEDPOWER__C.ToString();
+                System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+                wMainele.OP_ED_POTDIS = Convert.ToString(service.AVAILABLEPOWER__C, culture);
+                wMainele.OP_ED_POTCON = Convert.ToString(service.ENGRAVEDPOWER__C, culture);
                 wMainele.OP_ER_LIVTEN_TF = service.VOLTAGELEVEL__C;
-                wMainele.OP_ER_RESI_TF = Decode_bool(service.ISRESIDENTATSUPPLY__C);
-                wMainele.OP_ER_OPZAEEG = Decode_opzaeeg(wMainele.OP_ER_TIPOUT_TF, wMainele.OP_ER_RESI_TF, wMainele.OP_ER_LIVTEN_TF);
+                wMainele.OP_ER_RESI_TF = DecodeResi(service.ISRESIDENTATSUPPLY__C);
+                wMainele.OP_ER_OPZAEEG = Decode_opzaeeg(wMainele.OP_ER_TIPOUT_TF, wMainele.OP_ER_RESI_TF, wMainele.OP_ER_LIVTEN_TF, wMainele.OP_ED_POTCON, wMainele.OP_ED_POTDIS);
                 wMainele.EQ_COANC0 = service.ANNUALCONSUMPTION__C.ToString();
+                wMainele.OP_EG_ENERG = DecodeResi(service.ISENERGYINTENSIVE__C);
+                wMainele.OP_EG_DOMD1 = DecodeResi(service.ISTD1__C);
+                wMainele.OP_EU_CLESEN = service.ENERGYINTENSIVECLASS__C;
+                
                 Tuple<string, string> tarkond = Decode_tarkond(wMainele.OP_ER_TIPOUT_TF, wMainele.OP_ER_RESI_TF, wMainele.OP_ED_POTCON);
                 wMainele.TARIFART_ER_ACC = tarkond.Item1;
                 wMainele.KONDIGR_ER_ACC = tarkond.Item2;
                 wMainele.EF_ESENZAC = "0.0";
                 wMainele.EI_ACCAUFX = "0.0";
-                Tuple<string, string> tarkond_opz = Decode_tarkond_opz(wMainele.OP_ER_OPZAEEG);
+                Tuple<string, string> tarkond_opz = Decode_tarkond_opz(wMainele.OP_ER_OPZAEEG, wMainele.OP_EG_DOMD1, wMainele.OP_EG_ENERG);
                 wMainele.TARIFART_ER_OPZ = tarkond_opz.Item1;
                 wMainele.KONDIGR_ER_OPZ = tarkond_opz.Item2;
                 wMainele.DATE_FROM = "19500101";
                 wMainele.EXT_UI = service.POD__C;
                 wMainele.GRID_ID = wMainele.Decode_grid_id(service.DISTRIBUTOR__C);
+                wMainele.IMPIANTO_OLD = service.ZAPPKEYPLANT__C;
 
                 // Dati del misuratore - start
                 wMainele.ZWGRUPPE = "ZLETF0";
                 wMainele.EGERR_INFO = service.REGISTRATIONNUMBER__C;
-                wMainele.MATNR = "ZLETF0";
+                wMainele.MATNR = "Z_LETF0";
                 wMainele.KEYDATE = "20190101";
                 wMainele.NCAP_STANZVOR = 9;
                 wMainele.NCIR_STANZVOR = 9;
-                wMainele.ZWFAKT_ATT_F0 = 1.0f;
+                wMainele.ZWFAKT_ATT_F0.ToString();
                 //wMainele.ZWFAKT_ATT_F1 = 1.0f;
                 //wMainele.ZWFAKT_ATT_F2 = 1.0f;
                 //wMainele.ZWFAKT_ATT_F3 = 1.0f;
-                wMainele.ZWFAKT_REA_F0 = 1.0f;
+                wMainele.ZWFAKT_REA_F0.ToString();
                 //wMainele.ZWFAKT_REA_F1 = 1.0f;
                 //wMainele.ZWFAKT_REA_F2 = 1.0f;
                 //wMainele.ZWFAKT_REA_F3 = 1.0f;
-                wMainele.ZWFAKT_POT_F0 = 1.0f;
+                wMainele.ZWFAKT_POT_F0.ToString();
                 //wMainele.ZWFAKT_POT_F1 = 1.0f;
                 //wMainele.ZWFAKT_POT_F2 = 1.0f;
                 //wMainele.ZWFAKT_POT_F3 = 1.0f;
                 wMainele.NCPP_STANZVOR = 9;
                 wMainele.EADAT = "20190101";
                 // Dati del misuratore - end
-
+                wMainele.VREFER = asset.ZAPPKEYCONTRACT__C;
                 wMainele.EINZDAT = asset.NE__STARTDATE__C.ToString();
                 wMainele.AUSZDAT = asset.NE__ENDDATE__C.ToString();
                 wMainele.Z_MERCATO = wMainele.Decode_zmercato(asset.MARKETTYPE__C);
@@ -248,10 +287,12 @@ namespace Alperia_ISU_New
                 wMainele.ZTIP_OFF = Decode_ztipoff(wMainele.Z_MERCATO);
                 wMainele.Z_PRODOTTO = asset.NAME;
                 wMainele.Z_PRODOTTO_DESC = asset.PRODUCTDESCRIPTION__C;
-                wMainele.Z_INIZIO = "20190101";
+                wMainele.Z_INIZIO = asset.NE__STARTDATE__C.ToString();
                 wMainele.Z_FINE = "99991231";
                 // dati della lettura
 
+                wMainele.REA_ADAT = "20200901";
+                wMainele.REA_ISTABLART = "01";
                 wMainele.RLEA_PREL_F0 = "0.0";
                 wMainele.RLREA_PREL_F0 = "0.0";
                 wMainele.RLPOT_PREL_F0 = "0.0";
@@ -279,6 +320,70 @@ namespace Alperia_ISU_New
             Console.WriteLine("Fine programma");
             Console.ReadKey();
             }
+
+        private static string DecodeDate(string idate)
+        {
+            if(idate == "00000000")
+            {
+                return null;
+            } else
+            {
+                return idate;
+            }
+        }
+
+        private static string DecodeSpebene(string livten)
+        {
+            if(livten == "BT")
+            {
+                return "01";
+            } else if (livten == "MT")
+            {
+                return "02";
+            } else
+            {
+                return "03";
+            }
+        }
+
+        private static (string first, string last) SplitName(string name)
+        {
+            string first, last;
+
+            if (name.Length > 40)
+            {
+                first = name.Substring(0, 40);
+                last = name.Substring(40, 40);
+            } else
+            {
+                first = name;
+                last = "";
+            }
+            return (first, last);
+        }
+
+        private static string Decode_butype(string custtype)
+        {
+            if(custtype == "PUAM")
+            {
+                return "2";
+            } else if (custtype == "RSDN")
+            {
+                return "1";
+            } else if (custtype == "SMEN")
+            {
+                return "2";
+            } else if (custtype == "CORP")
+            {
+                return "2";
+            } else if (custtype == "CNDM")
+            {
+                return "2";
+            } else
+            {
+                return "2";
+            }
+        }
 
         private static List<ConfComm> CreaConfComm(Assett asset, List<Zprodotti> lprodotti, List<Zmapping> lmapping)
         {
@@ -365,21 +470,74 @@ namespace Alperia_ISU_New
             }
         }
 
-        private static Tuple<string, string> Decode_tarkond_opz(string OPZAEEG)
+        private static Tuple<string, string> Decode_tarkond_opz(string OPZAEEG, string DOMD1, string ENERG)
         {
-            if (OPZAEEG == "TDR")
+            if (OPZAEEG == "TDR" && DOMD1 == "N")
             {
                 return new Tuple<string, string>("E_TDR", "TDR");
-            } else if (OPZAEEG == "TDNR")
+            } else if (OPZAEEG == "TDNR" && DOMD1 == "N")
             {
                 return new Tuple<string, string>("E_TDNR", "TDNR");
-            } else if (OPZAEEG == "BTA1")
+            } else if (OPZAEEG == "TDR" && DOMD1 == "Y")
+            {
+                return new Tuple<string, string>("E_TD1", "TD1");
+            } else if (OPZAEEG == "TDNR" && DOMD1 == "Y")
+            {
+                return new Tuple<string, string>("E_TD1", "TD1");
+            }
+            else if (OPZAEEG == "BTA1" && ENERG == "N")
             {
                 return new Tuple<string, string>("E_BTA1", "BTA1");
-            } else if (OPZAEEG == "BTIP")
+            }
+            else if (OPZAEEG == "BTA1" && ENERG == "Y")
+            {
+                return new Tuple<string, string>("E_BTA1", "ENERGBTA1");
+            }
+            else if (OPZAEEG == "BTA2" && ENERG == "N")
+            {
+                return new Tuple<string, string>("E_BTA2", "BTA2");
+            }
+            else if (OPZAEEG == "BTA1" && ENERG == "Y")
+            {
+                return new Tuple<string, string>("E_BTA2", "ENERGBTA2");
+            }
+            else if (OPZAEEG == "BTA3" && ENERG == "N")
+            {
+                return new Tuple<string, string>("E_BTA3", "BTA3");
+            }
+            else if (OPZAEEG == "BTA3" && ENERG == "Y")
+            {
+                return new Tuple<string, string>("E_BTA3", "ENERGBTA3");
+            }
+            else if (OPZAEEG == "BTA4" && ENERG == "N")
+            {
+                return new Tuple<string, string>("E_BTA4", "BTA4");
+            }
+            else if (OPZAEEG == "BTA4" && ENERG == "Y")
+            {
+                return new Tuple<string, string>("E_BTA4", "ENERGBTA4");
+            }
+            else if (OPZAEEG == "BTA5" && ENERG == "N")
+            {
+                return new Tuple<string, string>("E_BTA5", "BTA5");
+            }
+            else if (OPZAEEG == "BTA5" && ENERG == "Y")
+            {
+                return new Tuple<string, string>("E_BTA5", "ENERGBTA5");
+            }
+            else if (OPZAEEG == "BTA6" && ENERG == "N")
+            {
+                return new Tuple<string, string>("E_BTA6", "BTA6");
+            }
+            else if (OPZAEEG == "BTA6" && ENERG == "Y")
+            {
+                return new Tuple<string, string>("E_BTA6", "ENERGBTA6");
+            }
+            else if (OPZAEEG == "BTIP")
             {
                 return new Tuple<string, string>("E_BTIP", "BTIP");
-            } else if (OPZAEEG == "MTIP")
+            } 
+            else if (OPZAEEG == "MTIP")
             {
                 return new Tuple<string, string>("E_MTIP", "MTIP");
             }
@@ -391,13 +549,23 @@ namespace Alperia_ISU_New
 
         private static Tuple<string, string> Decode_tarkond(string TIPOUT, string RESI, string POTCON)
         {
-            if(TIPOUT == "DO" && RESI == null)
+            var lPotcon = float.Parse(POTCON, CultureInfo.InvariantCulture);
+            if (TIPOUT == "DO" && RESI == "N")
             {
                 return new Tuple<string, string>("E_ACDM", "ACCDNR");
-            } else if (TIPOUT == "DO" && RESI == "X")
+            } else if (TIPOUT == "DO" && RESI == "Y" && lPotcon <= 1.5)
+            {
+                return new Tuple<string, string>("E_ACDM", "ACCDR1");
+            }
+            else if (TIPOUT == "DO" && RESI == "Y" && (lPotcon > 1.5 && lPotcon <= 3.0))
             {
                 return new Tuple<string, string>("E_ACDM", "ACCDR2");
-            } else if (TIPOUT == "IP")
+            }
+            else if (TIPOUT == "DO" && RESI == "Y" && lPotcon > 3.0)
+            {
+                return new Tuple<string, string>("E_ACDM", "ACCDR3");
+            }
+            else if (TIPOUT == "IP")
             {
                 return new Tuple<string, string>("E_ACAU", "ORD");
             }
@@ -407,11 +575,14 @@ namespace Alperia_ISU_New
             }
         }
 
-        private static string Decode_opzaeeg(string TIPOUT, string RESI, string LIVTEN)
+        private static string Decode_opzaeeg(string TIPOUT, string RESI, string LIVTEN, string POTCON, string POTDIS)
         {
+            var lPotcon = float.Parse(POTCON, CultureInfo.InvariantCulture);
+            var lPotdis = float.Parse(POTDIS, CultureInfo.InvariantCulture);
+
             if (TIPOUT == "DO")
             {
-                if (RESI == "X")
+                if (RESI == "Y")
                 {
                     return "TDR";
                 } else
@@ -427,9 +598,29 @@ namespace Alperia_ISU_New
             {
                 return "MTIP";
             }
-            else if (TIPOUT == "AU" && LIVTEN == "BT")
+            else if (TIPOUT == "AU" && LIVTEN == "BT" && (lPotcon <= 1.5))
             {
                 return "BTA1";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "BT" && (lPotcon > 1.5 && lPotcon <= 3.0))
+            {
+                return "BTA2";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "BT" && (lPotcon > 3.0 && lPotcon <= 6.0))
+            {
+                return "BTA3";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "BT" && (lPotcon > 6.0 && lPotcon <= 10.0))
+            {
+                return "BTA4";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "BT" && (lPotcon > 10.0 && lPotcon <= 16.5))
+            {
+                return "BTA5";
+            }
+            else if (TIPOUT == "AU" && LIVTEN == "BT" && lPotdis > 16.5)
+            {
+                return "BTA6";
             }
             else if (TIPOUT == "AU" && LIVTEN == "MT")
             {
@@ -481,14 +672,14 @@ namespace Alperia_ISU_New
             }
         }
 
-        private static string Decode_bool(bool iSRESIDENTATSUPPLY__C)
+        private static string DecodeResi(bool iSRESIDENTATSUPPLY__C)
         {
             if (iSRESIDENTATSUPPLY__C)
             {
-                return "X";
+                return "Y";
             } else
             {
-                return null;
+                return "N";
             }
         }
 
@@ -550,6 +741,20 @@ namespace Alperia_ISU_New
             catch (Exception)
             {
                 Console.WriteLine("Errore su file {0}", "Zmapping");
+                throw;
+            }
+        }
+
+        private static List<ZsfReconKey> ProcessSfdc(CsvReader csv)
+        {
+            try
+            {
+                var zreconkeys = csv.GetRecords<ZsfReconKey>().ToList();
+                return zreconkeys;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Errore su file {0}", "ZsfReconKey");
                 throw;
             }
         }

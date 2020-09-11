@@ -189,7 +189,6 @@ public class MainEle
         public string OP_EG_DISDIS { get; set; }
         public string OP_EG_INTPRO { get; set; }
         public string OP_EG_MISLIM { get; set; }
-        public string OP_EG_CIVET { get; set; }
         public string OP_EG_ENERG { get; set; }
         public string OP_EG_AUSIL { get; set; }
         public string OP_EG_DOMD1 { get; set; }
@@ -215,15 +214,15 @@ public class MainEle
         public string APP_BIS { get; set; }
         public int NCAP_STANZVOR { get; set; }
         public int NCIR_STANZVOR { get; set; }
-        public float ZWFAKT_ATT_F0 { get; set; }
+    public float ZWFAKT_ATT_F0 { get; set; } = 1.0f;
         public float ZWFAKT_ATT_F1 { get; set; }
         public float ZWFAKT_ATT_F2 { get; set; }
         public float ZWFAKT_ATT_F3 { get; set; }
-        public float ZWFAKT_REA_F0 { get; set; }
+    public float ZWFAKT_REA_F0 { get; set; } = 1.0f;
         public float ZWFAKT_REA_F1{ get; set; }
         public float ZWFAKT_REA_F2 { get; set; }
         public float ZWFAKT_REA_F3 { get; set; }
-        public float ZWFAKT_POT_F0 { get; set; }
+    public float ZWFAKT_POT_F0 { get; set; } = 1.0f;
         public float ZWFAKT_POT_F1 { get; set; }
         public float ZWFAKT_POT_F2 { get; set; }
         public float ZWFAKT_POT_F3 { get; set; }
@@ -300,6 +299,14 @@ public class MainEle
                 return "Z004";
             case "PUAM":
                 return "Z005";
+            case "CORP":
+                return "Z003";
+            case "RSLR":
+                return "Z002";
+            case "CNDM":
+                return "Z006";
+            case "ASSC":
+                return "Z007";
             default:
                 return null;
         }
@@ -329,7 +336,7 @@ public class MainEle
             case "SELNET":
                 return "ZE_D01039";
             case "ENEL-D":
-                return "ZG_D00435";
+                return "ZE_D00435";
             default:
                 return "ZE_D03255";
         }
@@ -344,6 +351,14 @@ public class MainEle
             case "SMEN":
                 return "Z2";
             case "PUAM":
+                return "Z2";
+            case "CORP":
+                return "Z2";
+            case "RSLR":
+                return "Z2";
+            case "CNDM":
+                return "Z2";
+            case "ASSC":
                 return "Z2";
             default:
                 return null;
@@ -363,17 +378,24 @@ public class MainEle
         }
     }
 
-    public string Decode_zmodiv(string ishipmet)
+    public string Decode_zmodiv(string ishipmet, string bpkind)
     {
-        switch (ishipmet)
+        if(bpkind == "Z005")
         {
-            case "EML":
-                return "ZD";
-            case "PST":
-                return "ZC";
-            default:
-                return null;
+            return "FEPA";
+        } else
+        {
+            switch (ishipmet)
+            {
+                case "EML":
+                    return "ZD";
+                case "PST":
+                    return "ZC";
+                default:
+                    return null;
+            }
         }
+        
     }
 }
 

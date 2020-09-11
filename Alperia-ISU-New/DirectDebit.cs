@@ -14,8 +14,8 @@ public class DirectDebit
     public string HOLDERVATFISCALCODE__C { get; set; }
     public string HOLDERFIRSTNAME__C { get; set; }
     public string HOLDERLASTNAME__C { get; set; }
-    public int STARTDATE__C { get; set; }
-    public int ENDDATE__C { get; set; }
+    public string STARTDATE__C { get; set; }
+    public string ENDDATE__C { get; set; }
     public string APPLICANTFIRSTNAME__C { get; set; }
     public string APPLICANTFULLNAME__C { get; set; }
     public string APPLICANTLASTNAME__C { get; set; }

@@ -11,8 +11,8 @@ public class Assett
     public int CONTRACTTYPE__C { get; set; }
     public double ANNUALCONSUMPTION__C { get; set; }
     public long DISTRIBUTORVAT__C { get; set; }
-    public int NE__STARTDATE__C { get; set; }
-    public int NE__ENDDATE__C { get; set; }
+    public string NE__STARTDATE__C { get; set; }
+    public string NE__ENDDATE__C { get; set; }
     public string MARKETTYPE__C { get; set; }
     public string ZAPPKEYCONTRACT__C { get; set; }
     public string COMMODITY_TYPE__C { get; set; }
@@ -26,8 +26,8 @@ public class Assett
     public string PROCESS__C { get; set; }
     public string DESCRIPTION { get; set; }
     public string OWNERID { get; set; }
-    public int QUOTEENDDATE__C { get; set; }
-    public int DEADLINEFORWITHDRAWAL__C { get; set; }
+    public string QUOTEENDDATE__C { get; set; }
+    public string DEADLINEFORWITHDRAWAL__C { get; set; }
     public string ACCOUNTID { get; set; }
     public string NE__BILLINGPROF__C { get; set; }
     public string NE__SERVICE_POINT__C { get; set; }
@@ -66,7 +66,7 @@ public class Assett
     public string FINALCUSTOMERCFVAT__C { get; set; }
     public string FINALCUSTOMEREMAIL__C { get; set; }
     public string FINALCUSTOMERPHONE__C { get; set; }
-    public int NE__ACTIVATION_DATE__C { get; set; }
+    public string NE__ACTIVATION_DATE__C { get; set; }
     public string NE__ASSETITEMENTERPRISEID__C { get; set; }
     public int EXCISEDUTIES_DATE { get; set; }
     public string ZAPPPARENTCA__C { get; set; }
