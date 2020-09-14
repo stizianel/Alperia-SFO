@@ -1,0 +1,66 @@
+﻿using System;
+
+public class BillingProfile
+{
+    public string SRC_SYSTEM { get; set; }
+    public string RUN_ID { get; set; }
+    public int ROW_ID { get; set; }
+    public string BPEXT { get; set; }
+    public string SHIPPINGCITY__C { get; set; }
+    public string SHIPPINGCITYDE__C { get; set; }
+    public string SHIPPINGCOUNTRY__C { get; set; }
+    public string SHIPPINGCOUNTRYDE__C { get; set; }
+    public string SHIPPINGSTREETNUMBER__C { get; set; }
+    public string SHIPPINGSHIPTO__C { get; set; }
+    public string SHIPPINGFLOOR__C { get; set; }
+    public int SHIPPINGPOSTALCODE__C { get; set; }
+    public string SHIPPINGPROVINCE__C { get; set; }
+    public string SHIPPINGSTREETNAME__C { get; set; }
+    public string SHIPPINGSTREETNAMEDE__C { get; set; }
+    public string SHIPPINGTOPONYMY__C { get; set; }
+    public int SHIPPINGISTAT__C { get; set; }
+    public string SHIPPINGFLATNUMBER__C { get; set; }
+    public string NE__IBAN__C { get; set; }
+    public string VATCODEFISCALCODE__C { get; set; }
+    public string HOLDERFIRSTNAME__C { get; set; }
+    public string HOLDERLASTNAME__C { get; set; }
+    public string PARTNERSOCIETY__C { get; set; }
+    public string PAYMENTTERMS__C { get; set; }
+    public int VATRATE2__C { get; set; }
+    public string SHIPPINGMETHOD__C { get; set; }
+    public string INVOICEDETAILTYPE__C { get; set; }
+    public string IPACODE__C { get; set; }
+    public string IPASTARTDATE__C { get; set; }
+    public string OUCODE__C { get; set; }
+    public string IOUCODE__C { get; set; }
+    public string CONSIP__C { get; set; }
+    public string PAYMENTMETHOD__C { get; set; }
+    public string CODESDI__C { get; set; }
+    public string BILLINGPEC__C { get; set; }
+    public string ISDIFFERENTSUBSCRIBER__C { get; set; }
+    public string APPLICANTFIRSTNAME__C { get; set; }
+    public string APPLICANTFISCALCODE__C { get; set; }
+    public string APPLICANTFULLNAME__C { get; set; }
+    public string APPLICANTLASTNAME__C { get; set; }
+    public string BANKCODE__C { get; set; }
+    public string BRANCHCODE__C { get; set; }
+    public string BANKNAME__C { get; set; }
+    public string CFSIGNATUREALLOWED__C { get; set; }
+    public string CIN__C { get; set; }
+    public string SWIFTBIC__C { get; set; }
+    public string BILLINGEMAIL__C { get; set; }
+    public string INVOICEEMAIL__C { get; set; }
+    public string COMMODITYTYPE__C { get; set; }
+    public string NE__ACCOUNT__C { get; set; }
+    public string DIRECTDEBIT__C { get; set; }
+    public string ZAPPKEYCONTRACTACCOUNT__C { get; set; }
+    public string RESELLERBILLING__C { get; set; }
+    public string ISTOPBILLING__C { get; set; }
+    public string INSURANCE_CODES__C { get; set; }
+    public string ACTIVEADDRESSLANGUAGE__C { get; set; }
+    public string BILLINGPROFILECODE__C { get; set; }
+    public string CUSTOMERCODE__C { get; set; }
+    public string ZAPPLOTCODE__C { get; set; }
+    public string HOLDERFULLNAME__C { get; set; }
+    public string HOLDERCOMPANYNAME__C { get; set; }
+}

@@ -20,6 +20,7 @@ public class MainGas
         public string CRM_PARTNER { get; set; }
         public string CRM_ACCOUNT { get; set; }
         public string CRM_CONTRATTO { get; set; }
+        public string CRM_IMPIANTO { get; set; }
         public string TIPO_OPERAZIONE { get; set; }
         public string BU_TYPE { get; set; }
         public string NAME_FIRST { get; set; }
@@ -283,16 +284,14 @@ public class MainGas
     {
         switch (iDist)
         {
-            case "AE-EW-EE":
-                return "ZE_D03255";
-            case "EDYNA":
-                return "ZE_D03255";
-            case "SELNET":
-                return "ZE_D01039";
-            case "ENEL-D":
-                return "ZG_D00435";
+            case "AE-EW":
+                return "ZG_D03255";
+            case "SEAB":
+                return "ZG_D00436";
+            case "SELGAS":
+                return "ZG_D01039";
             default:
-                return "ZE_D03255";
+                return "ZG_D03255";
         }
     }
 
@@ -319,22 +318,32 @@ public class MainGas
                 return "MENS";
             case "Bimestrale":
                 return "BIME";
+            case "Quadrimestrale":
+                return "QUADR";
             default:
                 return null;
         }
     }
 
-    public string Decode_zmodiv(string ishipmet)
+    public string Decode_zmodiv(string ishipmet, string bpkind)
     {
-        switch (ishipmet)
+        if (bpkind == "Z005")
         {
-            case "EML":
-                return "ZD";
-            case "PST":
-                return "ZC";
-            default:
-                return null;
+            return "FEPA";
         }
+        else
+        {
+            switch (ishipmet)
+            {
+                case "EML":
+                    return "ZD";
+                case "PST":
+                    return "ZC";
+                default:
+                    return null;
+            }
+        }
+
     }
 }
 
