@@ -23,6 +23,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alperia-ISU-New", "Alperia-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alperia-ISU-MainGas", "Alperia-ISU-MainGas\Alperia-ISU-MainGas.csproj", "{0BB72210-C19B-4568-A7B6-5AFCC7063339}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alperia-ISU-Lib", "Alperia-ISU-Lib\Alperia-ISU-Lib.csproj", "{45CAD2A7-9E31-4D9F-8808-62530046C2C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isu-ver-fica", "Isu-ver-fica\Isu-ver-fica.csproj", "{A1293DD9-8CA0-4BE1-8E58-EDC2ECB21C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isu-ver-MainGas", "Isu-ver-MainGas\Isu-ver-MainGas.csproj", "{7809A054-3AD5-4B06-8CF5-FC40F0D7E690}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isu-Ver-MaiEle", "Isu-Ver-MaiEle\Isu-Ver-MaiEle.csproj", "{88AFD4E1-03D7-47AC-9610-166C870758C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +53,22 @@ Global
 		{0BB72210-C19B-4568-A7B6-5AFCC7063339}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BB72210-C19B-4568-A7B6-5AFCC7063339}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BB72210-C19B-4568-A7B6-5AFCC7063339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45CAD2A7-9E31-4D9F-8808-62530046C2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45CAD2A7-9E31-4D9F-8808-62530046C2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45CAD2A7-9E31-4D9F-8808-62530046C2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45CAD2A7-9E31-4D9F-8808-62530046C2C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1293DD9-8CA0-4BE1-8E58-EDC2ECB21C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1293DD9-8CA0-4BE1-8E58-EDC2ECB21C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1293DD9-8CA0-4BE1-8E58-EDC2ECB21C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1293DD9-8CA0-4BE1-8E58-EDC2ECB21C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7809A054-3AD5-4B06-8CF5-FC40F0D7E690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7809A054-3AD5-4B06-8CF5-FC40F0D7E690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7809A054-3AD5-4B06-8CF5-FC40F0D7E690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7809A054-3AD5-4B06-8CF5-FC40F0D7E690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

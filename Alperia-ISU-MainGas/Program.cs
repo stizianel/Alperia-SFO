@@ -112,7 +112,7 @@ namespace Alperia_ISU_MainGas
                 wMainele.ZMIGCTR = "1";
                 wMainele.ZMIGCO = "1";
                 wMainele.ZMIGINST = "1";
-                wMainele.ZMIGPOD = "1";
+                wMainele.ZMIGPDR = "1";
                 wMainele.ZMIGDEV = "1";
                 wMainele.ZMIGREA = "1";
 
@@ -233,7 +233,7 @@ namespace Alperia_ISU_MainGas
                 wMainele.ZCANACQ = "SP";
                 
                 wMainele.DATE_FROM = "19500101";
-                wMainele.EXT_UI = service.POD__C;
+                wMainele.EXT_UI = service.PDR__C; 
                 wMainele.GRID_ID = wMainele.Decode_grid_id(service.DISTRIBUTOR__C);
                 wMainele.IMPIANTO_OLD = service.ZAPPKEYPLANT__C;
 
