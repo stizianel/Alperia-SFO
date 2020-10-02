@@ -18,14 +18,18 @@ namespace Isu_Ver_MaiEle
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("E:\\work\\Alperia\\log-MainEle.log", rollingInterval: RollingInterval.Hour)
+            .WriteTo.File("E:\\work\\Alperia\\log-MainEle.log", rollingInterval: RollingInterval.Minute)
             .CreateLogger();
 
-            var readerEle = new StreamReader("E:\\work\\Alperia\\QUA\\100_20200930_MAIN_ELE.csv");
+            var fValid = new StreamReader("E:\\work\\Alperia\\QUA\\valid_semplici.csv");
+            var csvValid = new CsvReader(fValid, CultureInfo.InvariantCulture);
+            csvValid.Configuration.Delimiter = ";";
+            List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
+
+            var readerEle = new StreamReader("E:\\work\\Alperia\\QUA\\100_20201001_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
             csvEle.Configuration.Delimiter = ";";
-            var lEle = new List<MainEle>();
-            lEle = ProcessEle(csvEle);
+            List<MainEle> lEle = ProcessEle(csvEle);
             foreach (var rec in lEle)
             {
                 ValidationContext context = new ValidationContext(rec, null, null);
@@ -39,7 +43,7 @@ namespace Isu_Ver_MaiEle
                         Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
                     }
                 }
-                EleValidator validator = new EleValidator();
+                EleValidator validator = new EleValidator(lvalid);
                 FluentValidation.Results.ValidationResult results = validator.Validate(rec);
                 if (!results.IsValid)
                 {

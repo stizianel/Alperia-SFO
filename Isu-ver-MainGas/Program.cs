@@ -18,10 +18,15 @@ namespace Isu_ver_MainGas
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("E:\\work\\Alperia\\log-MainGas.log", rollingInterval: RollingInterval.Hour)
+            .WriteTo.File("E:\\work\\Alperia\\log-MainGas.log", rollingInterval: RollingInterval.Minute)
             .CreateLogger();
 
-            var readerGas = new StreamReader("E:\\work\\Alperia\\QUA\\100_20200930_MAIN_GAS.csv");
+            var fValid = new StreamReader("E:\\work\\Alperia\\QUA\\valid_semplici.csv");
+            var csvValid = new CsvReader(fValid, CultureInfo.InvariantCulture);
+            csvValid.Configuration.Delimiter = ";";
+            List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
+
+            var readerGas = new StreamReader("E:\\work\\Alperia\\QUA\\100_20201001_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
 
@@ -40,7 +45,7 @@ namespace Isu_ver_MainGas
                         Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
                     }
                 }
-                GasValidator validator = new GasValidator();
+                GasValidator validator = new GasValidator(lvalid);
                 FluentValidation.Results.ValidationResult results = validator.Validate(rec);
                 if (!results.IsValid)
                 {
