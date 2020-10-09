@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -12,6 +14,8 @@ public class GasValidator : AbstractValidator<MainGas>
         List<string> lovGridId = llov.Where(x => x.Campo == "GRID_ID").Select(x => x.Valore).ToList();
         List<string> lovZModinv = llov.Where(x => x.Campo == "Z_MODINV").Select(x => x.Valore).ToList();
         List<string> lovBpkind = llov.Where(x => x.Campo == "BPKIND").Select(x => x.Valore).ToList();
+        List<string> lovService = llov.Where(x => x.Campo == "SERVICE").Select(x => x.Valore).ToList();
+        List<string> lovZfreq = llov.Where(x => x.Campo == "ZFREQ").Select(x => x.Valore).ToList();
 
         RuleFor(x => x.CF_TAXNUM).NotEmpty().When(x => x.BU_TYPE == "1").WithMessage("TAXNUM assente in BU_TYPE 1");
         RuleFor(x => x.PI_TAXNUM).NotEmpty().When(x => x.BU_TYPE == "2" && (x.CF_TAXNUM[0] != '8' && x.CF_TAXNUM[0] != '9')).WithMessage("PIVA assente in BU_TYPE 2 e non Organizzazione");
@@ -20,6 +24,9 @@ public class GasValidator : AbstractValidator<MainGas>
         RuleFor(x => x.NAME_ORG1).NotEmpty().When(x => x.BU_TYPE == "2").WithMessage("NAME_ORG1 assente in BU_TYPE 2");
         RuleFor(x => x.IPA_CODE).NotEmpty().When(x => x.BPKIND == "Z005").WithMessage("IPA_CODE assente in cliente PA");
         RuleFor(x => x.IPA_BEGDA).NotEmpty().When(x => x.BPKIND == "Z005").WithMessage("IPA_BEGDA assente in cliente PA");
+
+        RuleFor(x => x.CRM_ACCOUNT).NotEmpty().When(x => x.VKONA != null).WithMessage("Manca chiave SFDC - Account");
+
         RuleFor(x => x.BPKIND)
         .Must(x => lovBpkind.Contains(x))
         .WithMessage("BPKIND errato {PropertyValue}");
@@ -37,6 +44,22 @@ public class GasValidator : AbstractValidator<MainGas>
         RuleFor(x => x.GRID_ID)
         .Must(x => lovGridId.Contains(x))
         .WithMessage("GRID_ID errato {PropertyValue}");
+
+        RuleFor(x => x.SERVICE)
+        .Must(x => lovService.Contains(x))
+        .WithMessage("SERVICE errato {PropertyValue}");
+
+        RuleFor(x => x.ZFREQ)
+       .Must(x => lovZfreq.Contains(x))
+       .WithMessage("ZFREQ errato {PropertyValue}");
+
+        RuleFor(x => DateTime.ParseExact(x.EINZDAT, "yyyyMMdd", CultureInfo.InvariantCulture))
+            .GreaterThanOrEqualTo(x => DateTime.ParseExact(x.IM_AB, "yyyyMMdd", CultureInfo.InvariantCulture))
+            .WithMessage("EINZDAT minore di IM_AB");
+
+        RuleFor(x => DateTime.ParseExact(x.EADAT_MIS, "yyyyMMdd", CultureInfo.InvariantCulture))
+            .GreaterThanOrEqualTo(x => DateTime.ParseExact(x.IM_AB, "yyyyMMdd", CultureInfo.InvariantCulture))
+            .WithMessage("EADAT_MIS minore di IM_AB");
 
         RuleFor(x => x.ZEGERR_INFO).NotEmpty().When(x => x.ZWGRUPPE == "ZGCORR").WithMessage("ZEGERR_INFO assente per ZGCORR");
         RuleFor(x => x.NCAP_STANZVOR_CF1).NotEmpty().When(x => x.ZWGRUPPE == "ZGCORR").WithMessage("NCAP_STANZVOR_CF1 assente per ZGCORR");

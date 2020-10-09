@@ -290,8 +290,8 @@ public class MainGas
     [Required(ErrorMessage = "{0} is required")]
     public string GEMFAKT { get; set; }
         public string ABRSPERR { get; set; }
-    [Required(ErrorMessage = "{0} is required")]
-    public string COKEY { get; set; }
+    //Required(ErrorMessage = "{0} is required")]
+    // public string COKEY { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string KOFIZ { get; set; }
     [Required(ErrorMessage = "{0} is required")]

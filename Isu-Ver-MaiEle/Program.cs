@@ -18,7 +18,7 @@ namespace Isu_Ver_MaiEle
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("E:\\work\\Alperia\\log-MainEle.log", rollingInterval: RollingInterval.Minute)
+            .WriteTo.File("E:\\work\\Alperia\\PRD\\log-MainEle.log", rollingInterval: RollingInterval.Minute)
             .CreateLogger();
 
             var fValid = new StreamReader("E:\\work\\Alperia\\QUA\\valid_semplici.csv");
@@ -26,7 +26,7 @@ namespace Isu_Ver_MaiEle
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerEle = new StreamReader("E:\\work\\Alperia\\QUA\\100_20201001_MAIN_ELE.csv");
+            var readerEle = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201007_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
             csvEle.Configuration.Delimiter = ";";
             List<MainEle> lEle = ProcessEle(csvEle);

@@ -18,7 +18,7 @@ namespace Isu_ver_MainGas
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("E:\\work\\Alperia\\log-MainGas.log", rollingInterval: RollingInterval.Minute)
+            .WriteTo.File("E:\\work\\Alperia\\PRD\\log-MainGas.log", rollingInterval: RollingInterval.Minute)
             .CreateLogger();
 
             var fValid = new StreamReader("E:\\work\\Alperia\\QUA\\valid_semplici.csv");
@@ -26,11 +26,12 @@ namespace Isu_ver_MainGas
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerGas = new StreamReader("E:\\work\\Alperia\\QUA\\100_20201001_MAIN_GAS.csv");
+            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201009_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
 
             var lGas = new List<MainGas>();
+            Log.Logger.Information("Inizio LOG");
             lGas = ProcessGas(csvGas);
             foreach (var rec in lGas)
             {
@@ -56,6 +57,7 @@ namespace Isu_ver_MainGas
                     }
                 }
             }
+            Log.Logger.Information("Fine Log");
             Console.ReadKey();
         }
 

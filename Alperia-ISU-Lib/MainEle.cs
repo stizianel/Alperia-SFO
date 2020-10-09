@@ -217,8 +217,6 @@ public class MainEle
     public string IM_AB { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string IM_SPEBENE { get; set; }
-    [Required(ErrorMessage = "{0} is required")]
-    public string Z_DISVENDITORE { get; set; }
         public string BRANCHE { get; set; }
         public string Z_CUTOFF { get; set; }
         public string Z_ULTFATT { get; set; }
@@ -331,9 +329,9 @@ public class MainEle
     public string SPARTE { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string GEMFAKT { get; set; }
-        public string ABRSPERR { get; set; }
-    [Required(ErrorMessage = "{0} is required")]
-    public string COKEY { get; set; }
+    public string ABRSPERR { get; set; }
+    //[Required(ErrorMessage = "{0} is required")]
+    //public string COKEY { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string KOFIZ { get; set; }
     [Required(ErrorMessage = "{0} is required")]
