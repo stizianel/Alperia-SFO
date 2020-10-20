@@ -233,7 +233,6 @@ public class MainEle
     public string OP_ED_POTCON { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string OP_ER_LIVTEN_TF { get; set; }
-    [Required(ErrorMessage = "{0} is required")]
     public string OP_ER_RESI_TF { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string OP_ER_OPZAEEG { get; set; }
@@ -282,8 +281,8 @@ public class MainEle
     [Required(ErrorMessage = "{0} is required")]
     public string KEYDATE { get; set; }
         public string APP_BIS { get; set; }
-        public int NCAP_STANZVOR { get; set; }
-        public int NCIR_STANZVOR { get; set; }
+        public string NCAP_STANZVOR { get; set; }
+        public string NCIR_STANZVOR { get; set; }
     public string ZWFAKT_ATT_F0 { get; set; }
         public string ZWFAKT_ATT_F1 { get; set; }
         public string ZWFAKT_ATT_F2 { get; set; }
@@ -296,7 +295,7 @@ public class MainEle
         public string ZWFAKT_POT_F1 { get; set; }
         public string ZWFAKT_POT_F2 { get; set; }
         public string ZWFAKT_POT_F3 { get; set; }
-        public int NCPP_STANZVOR { get; set; }
+        public string NCPP_STANZVOR { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string EADAT { get; set; }
         public string FLAG_ATTF0 { get; set; }
@@ -313,8 +312,8 @@ public class MainEle
         public string FLAG_POTF3 { get; set; }
         public string FLAG_EDMAT { get; set; }
         public string FLAG_EDMRT { get; set; }
-        public int NEDMAT_STANZVOR { get; set; }
-        public int NEDMRE_STANZVOR { get; set; }
+        public string NEDMAT_STANZVOR { get; set; }
+        public string NEDMRE_STANZVOR { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string EINZDAT { get; set; }
     [Required(ErrorMessage = "{0} is required")]

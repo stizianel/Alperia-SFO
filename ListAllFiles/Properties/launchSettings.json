@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ListAllFiles": {
+      "commandName": "Project",
+      "commandLineArgs": "e:\\work\\alperia\\filerich e:\\work\\alperia\\filerich\\out T"
+    }
+  }
+}

@@ -267,12 +267,12 @@ public class MainGas
     public string KEYDATE { get; set; }
         public string APP_BIS { get; set; }
     public string ZEGERR_INFO { get; set; }
-    public int NCAP_STANZVOR { get; set; }
-        public float ZWFAKT_MIS { get; set; }      
+    public string NCAP_STANZVOR { get; set; }
+        public string ZWFAKT_MIS { get; set; }      
         public string EADAT_MIS { get; set; }
-        public int NCAP_STANZVOR_CF1 { get; set; }
+        public string NCAP_STANZVOR_CF1 { get; set; }
         public string ZWFAKT_CORF1 { get; set; }
-        public int NCAP_STANZVOR_F2 { get; set; }
+        public string NCAP_STANZVOR_F2 { get; set; }
         public string ZWFAKT_CORF2 { get; set; }
         public string EADAT_COR { get; set; }
     [Required(ErrorMessage = "{0} is required")]

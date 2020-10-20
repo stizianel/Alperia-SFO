@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isu-ver-MainGas", "Isu-ver-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isu-Ver-MaiEle", "Isu-Ver-MaiEle\Isu-Ver-MaiEle.csproj", "{88AFD4E1-03D7-47AC-9610-166C870758C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AggregaZ1", "AggregaZ1\AggregaZ1.csproj", "{9956F103-3441-49DF-98B6-748D8F40D9AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsuVerMainConf", "IsuVerMainConf\IsuVerMainConf.csproj", "{38771B4F-0A64-4846-8D02-2C75B8802B52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88AFD4E1-03D7-47AC-9610-166C870758C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9956F103-3441-49DF-98B6-748D8F40D9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9956F103-3441-49DF-98B6-748D8F40D9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9956F103-3441-49DF-98B6-748D8F40D9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9956F103-3441-49DF-98B6-748D8F40D9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38771B4F-0A64-4846-8D02-2C75B8802B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38771B4F-0A64-4846-8D02-2C75B8802B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38771B4F-0A64-4846-8D02-2C75B8802B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38771B4F-0A64-4846-8D02-2C75B8802B52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

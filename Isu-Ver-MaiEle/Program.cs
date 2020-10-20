@@ -15,6 +15,8 @@ namespace Isu_Ver_MaiEle
     {
         static void Main(string[] args)
         {
+            var dt_cutoff = args[0];
+
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
@@ -26,10 +28,11 @@ namespace Isu_Ver_MaiEle
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerEle = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201007_MAIN_ELE.csv");
+            var readerEle = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201020_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
             csvEle.Configuration.Delimiter = ";";
             List<MainEle> lEle = ProcessEle(csvEle);
+            Log.Logger.Information("Inizio validazione");
             foreach (var rec in lEle)
             {
                 ValidationContext context = new ValidationContext(rec, null, null);
@@ -43,7 +46,8 @@ namespace Isu_Ver_MaiEle
                         Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
                     }
                 }
-                EleValidator validator = new EleValidator(lvalid);
+                EleValidator validator = new EleValidator(lvalid, dt_cutoff);
+                //Console.WriteLine($"{rec.OP_ER_OPZAEEG} - {rec.OP_ER_TIPOUT_TF} - {rec.OP_ER_RESI_TF} - {rec.OP_ER_LIVTEN_TF} - {rec.ZTENS} - {rec.OP_ED_POTDIS}- {rec.OP_ED_POTCON}");
                 FluentValidation.Results.ValidationResult results = validator.Validate(rec);
                 if (!results.IsValid)
                 {
@@ -54,8 +58,8 @@ namespace Isu_Ver_MaiEle
                     }
                 }
             }
-    
 
+            Log.Logger.Information("Fine validazione");
             Console.ReadKey();
         }
 

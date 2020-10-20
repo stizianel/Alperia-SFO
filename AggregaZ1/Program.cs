@@ -1,12 +1,14 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using CsvHelper.Configuration.Attributes;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ListAllFiles
+namespace AggregaZ1
 {
     class Program
     {
@@ -21,8 +23,6 @@ namespace ListAllFiles
 
             var targetDirectory = args[0];
             var fileOutAlperia = $"{args[1]}\\ListRequests.csv";
-            var sinteticoTotale = args[2];
-
             //var fileUat = "E:\\work\\Alperia\\podUat.csv";
 
             using (var walperia = new StreamWriter(fileOutAlperia))
@@ -40,7 +40,7 @@ namespace ListAllFiles
                 string[] fileEntries = Directory.GetFiles(targetDirectory);
                 foreach (string fileName in fileEntries)
                 {
-                    recs = ProcessFile(fileName, sinteticoTotale);
+                    recs = ProcessFile(fileName, lUat);
                     reqsCsv.WriteRecords<Z1>(recs);
                 }
             }
@@ -49,7 +49,7 @@ namespace ListAllFiles
 
         }
 
-        private static List<Z1> ProcessFile(string fileName, string sinTot)
+        private static List<Z1> ProcessFile(string fileName, List<Uat> lUat)
         {
             List<Z1> outrec = new List<Z1>();
             using (var reader = new StreamReader(fileName))
@@ -70,20 +70,14 @@ namespace ListAllFiles
 
                     foreach (var k in toProc)
                     {
-                        if (sinTot == "S")
+                        var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
+                        rec.fileName = fileName;
+                        var res = lUat.Find(p => p.Pod_pdr == rec.PodPdrPdc__c);
+                        if (res != null)
                         {
-                            var rec = lZ1.Where(p => p.NE__Order_Item__c == k).First();
-                            rec.fileName = fileName;
-                            outrec.Add(rec);
-                        } else
-                        {
-                            var recs = lZ1.Where(p => p.NE__Order_Item__c == k).ToList();
-                            foreach (var item in recs)
-                            {
-                                outrec.Add(item);
-                            }
+                            rec.Scenario = res.Scenario;
                         }
-                        
+                        outrec.Add(rec);
                     }
                 }
                 catch (Exception)

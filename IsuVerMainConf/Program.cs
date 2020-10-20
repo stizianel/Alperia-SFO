@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using Alperia_ISU_Lib;
+using CsvHelper;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -9,33 +10,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Isu_ver_MainGas
+namespace IsuVerMainConf
 {
     class Program
     {
         static void Main(string[] args)
         {
-
             var dt_cutoff = args[0];
+            var dt_ab = args[1];
 
             Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .WriteTo.File("E:\\work\\Alperia\\PRD\\log-MainGas.log", rollingInterval: RollingInterval.Minute)
-            .CreateLogger();
+           .MinimumLevel.Debug()
+           .WriteTo.Console()
+           .WriteTo.File("E:\\work\\Alperia\\PRD\\log-MainConf.log", rollingInterval: RollingInterval.Minute)
+           .CreateLogger();
 
-            var fValid = new StreamReader("E:\\work\\Alperia\\QUA\\valid_semplici.csv");
-            var csvValid = new CsvReader(fValid, CultureInfo.InvariantCulture);
-            csvValid.Configuration.Delimiter = ";";
-            List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
-
-            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201020_MAIN_GAS.csv");
+            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201019_CONFCOMM_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
 
-            var lGas = new List<MainGas>();
+            var lGas = new List<MainConf>();
             Log.Logger.Information("Inizio LOG");
-            lGas = ProcessGas(csvGas);
+            lGas = ProcessConf(csvGas);
             foreach (var rec in lGas)
             {
                 ValidationContext context = new ValidationContext(rec, null, null);
@@ -45,11 +41,11 @@ namespace Isu_ver_MainGas
                 {
                     foreach (ValidationResult validationResult in validationResults)
                     {
-                        Console.WriteLine("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
-                        Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
+                        Console.WriteLine("Riga {1} - {0}", validationResult.ErrorMessage, rec.EXT_UI);
+                        Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.EXT_UI);
                     }
                 }
-                GasValidator validator = new GasValidator(lvalid, dt_cutoff);
+                ConfValidator validator = new ConfValidator(dt_ab);
                 FluentValidation.Results.ValidationResult results = validator.Validate(rec);
                 if (!results.IsValid)
                 {
@@ -64,16 +60,16 @@ namespace Isu_ver_MainGas
             Console.ReadKey();
         }
 
-        private static List<MainGas> ProcessGas(CsvReader csvGas)
+        private static List<MainConf> ProcessConf(CsvReader csvGas)
         {
             try
             {
-                var zGas = csvGas.GetRecords<MainGas>().ToList();
+                var zGas = csvGas.GetRecords<MainConf>().ToList();
                 return zGas;
             }
             catch (Exception)
             {
-                Console.WriteLine("Errore su file {0}", "MainGas");
+                Console.WriteLine("Errore su file {0}", "MainConf");
                 throw;
             }
         }
