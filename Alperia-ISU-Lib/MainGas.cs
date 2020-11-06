@@ -224,19 +224,24 @@ public class MainGas
         public string Z_TPULTFATT { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string ZZONA_CLIMA { get; set; }
-        public string OP_GU_CATUSO { get; set; }
+    [Required(ErrorMessage = "{0} is required")]
+    public string OP_GU_CATUSO { get; set; }
         public string OP_GU_STATOF { get; set; }
-        public string OP_GU_CLAPRE { get; set; }
+    [Required(ErrorMessage = "{0} is required")]
+    public string OP_GU_CLAPRE { get; set; }
         public string OP_GU_AAEG { get; set; }
         public string OP_GQ_PROGAN { get; set; }
         public string OP_GF_COEFFC { get; set; }
-        public string OP_GR_TIPPDR { get; set; }
+    [Required(ErrorMessage = "{0} is required")]
+    public string OP_GR_TIPPDR { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string OP_GR_COREMI_1 { get; set; }
         public string OP_GR_COREMI_2 { get; set; }
-        public string OP_GU_CLAMIS { get; set; }
+    [Required(ErrorMessage = "{0} is required")]
+    public string OP_GU_CLAMIS { get; set; }
         public string GU_CLIMP { get; set; }
-        public string GQ_COANC0 { get; set; }
+    [Required(ErrorMessage = "{0} is required")]
+    public string GQ_COANC0 { get; set; }
         public string GQ_COANDI { get; set; }
         public string OP_GG_DISDIS { get; set; }
         public string OP_GF_PCSZERO { get; set; }

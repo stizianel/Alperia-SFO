@@ -64,10 +64,10 @@ public class GasValidator : AbstractValidator<MainGas>
         RuleFor(x => x.BKONT).NotEmpty().When(x => x.EZAWE == "S").WithMessage("Chiave Conto non valorizzato");
         RuleFor(x => x.IBAN).NotEmpty().When(x => x.EZAWE == "S").WithMessage("IBAN non valorizzato");
 
-        RuleFor(x => x.GRID_ID)
-        .Must(x => lovGridId.Contains(x))
-        .Must(x => x[1] == 'G')
-        .WithMessage("GRID_ID errato {PropertyValue}");
+        //RuleFor(x => x.GRID_ID)
+        //.Must(x => lovGridId.Contains(x))
+        //.Must(x => x[1] == 'G')
+        //.WithMessage("GRID_ID errato {PropertyValue}");
 
         RuleFor(x => x.SERVICE)
         .Must(x => lovService.Contains(x))
@@ -77,13 +77,13 @@ public class GasValidator : AbstractValidator<MainGas>
        .Must(x => lovZfreq.Contains(x))
        .WithMessage("ZFREQ errato {PropertyValue}");
 
-        RuleFor(x => DateTime.ParseExact(x.EINZDAT, "yyyyMMdd", CultureInfo.InvariantCulture))
-            .GreaterThanOrEqualTo(x => DateTime.ParseExact(x.IM_AB, "yyyyMMdd", CultureInfo.InvariantCulture))
-            .WithMessage("EINZDAT minore di IM_AB");
+        //RuleFor(x => DateTime.ParseExact(x.EINZDAT, "yyyyMMdd", CultureInfo.InvariantCulture))
+        //    .GreaterThanOrEqualTo(x => DateTime.ParseExact(x.IM_AB, "yyyyMMdd", CultureInfo.InvariantCulture))
+        //    .WithMessage("EINZDAT minore di IM_AB");
 
-        RuleFor(x => DateTime.ParseExact(x.EADAT_MIS, "yyyyMMdd", CultureInfo.InvariantCulture))
-            .GreaterThanOrEqualTo(x => DateTime.ParseExact(x.IM_AB, "yyyyMMdd", CultureInfo.InvariantCulture))
-            .WithMessage("EADAT_MIS minore di IM_AB");
+        //RuleFor(x => DateTime.ParseExact(x.EADAT_MIS, "yyyyMMdd", CultureInfo.InvariantCulture))
+        //    .GreaterThanOrEqualTo(x => DateTime.ParseExact(x.IM_AB, "yyyyMMdd", CultureInfo.InvariantCulture))
+        //    .WithMessage("EADAT_MIS minore di IM_AB");
 
         RuleFor(x => x.MATNR)
        .Must(x => lovMatnr.Contains(x))

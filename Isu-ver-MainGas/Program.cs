@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,21 +23,43 @@ namespace Isu_ver_MainGas
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.File("E:\\work\\Alperia\\PRD\\log-MainGas.log", rollingInterval: RollingInterval.Minute)
+            //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+            //{
+            //    AutoRegisterTemplate = true,
+            //})
             .CreateLogger();
 
-            var fValid = new StreamReader("E:\\work\\Alperia\\QUA\\valid_semplici.csv");
+            var fValid = new StreamReader("E:\\work\\Alperia\\PRD\\validaz-semplici.CSV");
             var csvValid = new CsvReader(fValid, CultureInfo.InvariantCulture);
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201020_MAIN_GAS.csv");
+            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201106_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
+            csvGas.Configuration.BadDataFound = null;
+
+            var wrBps = new StreamWriter("E:\\work\\Alperia\\PRD\\BpGas.txt");
 
             var lGas = new List<MainGas>();
+
             Log.Logger.Information("Inizio LOG");
+            
+
             lGas = ProcessGas(csvGas);
-            foreach (var rec in lGas)
+            var lGasTemp = lGas.Skip(2000).Take(100);
+
+            //Log.Logger.Information("Inizio Estrazione elenco BP");
+            //List<string> lBps = lGasTemp.Select(p => p.BPEXT).Distinct().ToList();
+            //foreach (var item in lBps)
+            //{
+            //    var Bpcode = item.Split('_')[1];
+            //    wrBps.WriteLine(Bpcode);
+            //}
+            //wrBps.Close();
+            //Log.Logger.Information("Fine Estrazione elenco BP");
+
+            foreach (var rec in lGasTemp)
             {
                 ValidationContext context = new ValidationContext(rec, null, null);
                 List<ValidationResult> validationResults = new List<ValidationResult>();

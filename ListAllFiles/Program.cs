@@ -209,6 +209,12 @@ namespace ListAllFiles
         public string MeterReadingValue__c { get; set; }
         public string ZappKeyContact__c { get; set; }
         public string ContractSignatureDate__c { get; set; }
+        public string REMI__c { get; set; }
+        public string CommoditySector__c { get; set; }
+        public string TraderCode__c { get; set; }
+        public string FriendlyName__c { get; set; }
+        public string Z_ACC_PEC__c { get; set; }
+        public string NE__E_mail__c { get; set; }
         public string fileName { get; set; }
         public string Scenario { get; set; }
     }
