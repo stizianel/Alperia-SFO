@@ -34,7 +34,7 @@ namespace Isu_ver_MainGas
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201106_MAIN_GAS.csv");
+            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201107_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
             csvGas.Configuration.BadDataFound = null;
@@ -69,7 +69,7 @@ namespace Isu_ver_MainGas
                     foreach (ValidationResult validationResult in validationResults)
                     {
                         Console.WriteLine("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
-                        Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
+                        Log.Logger.Error("Riga {1} contratto {2} - {0}", validationResult.ErrorMessage, rec.ROW_ID, rec.VREFER);
                     }
                 }
                 GasValidator validator = new GasValidator(lvalid, dt_cutoff);
@@ -79,11 +79,11 @@ namespace Isu_ver_MainGas
                     foreach (var failure in results.Errors)
                     {
                         Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
-                        Log.Logger.Error("Riga {0} - {1} - {2}", rec.ROW_ID, failure.PropertyName, failure.ErrorMessage);
+                        Log.Logger.Error("Riga {0} contratto {3} - {1} - {2}", rec.ROW_ID, failure.PropertyName, failure.ErrorMessage, rec.VREFER);
                     }
                 }
             }
-            Log.Logger.Information("Fine Log");
+            Log.Logger.Information("Fine Log"); 
             Console.ReadKey();
         }
 

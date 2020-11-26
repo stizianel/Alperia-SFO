@@ -28,7 +28,7 @@ namespace Isu_Ver_MaiEle
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerEle = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201106_MAIN_ELE.csv");
+            var readerEle = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201108_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
             csvEle.Configuration.Delimiter = ";";
             csvEle.Configuration.BadDataFound = null;
@@ -68,7 +68,7 @@ namespace Isu_Ver_MaiEle
                     foreach (ValidationResult validationResult in validationResults)
                     {
                         Console.WriteLine("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
-                        Log.Logger.Error("Riga {1} - {0}", validationResult.ErrorMessage, rec.ROW_ID);
+                        Log.Logger.Error("Riga {1} Contratto {2} - {0}", validationResult.ErrorMessage, rec.ROW_ID, rec.VREFER);
                     }
                 }
                 EleValidator validator = new EleValidator(lvalid, dt_cutoff);
@@ -79,7 +79,7 @@ namespace Isu_Ver_MaiEle
                     foreach (var failure in results.Errors)
                     {
                         Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
-                        Log.Logger.Error("Riga {0} - {1} - {2}", rec.ROW_ID, failure.PropertyName, failure.ErrorMessage);
+                        Log.Logger.Error("Riga {0}  contratto {3} - {1} - {2}", rec.ROW_ID, failure.PropertyName, failure.ErrorMessage, rec.VREFER);
                     }
                 }
                 bool aeeg = validator.IsValidOpzAeeg(rec.OP_ER_OPZAEEG,

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Alperia_ISU_Lib
@@ -65,5 +66,19 @@ namespace Alperia_ISU_Lib
         public string FLG_REC_IVA { get; set; }
         public string SPERZ { get; set; }
         public string STUDT { get; set; }
+    }
+
+    public class DocficaContext
+    {
+        private readonly IMongoDatabase _db;
+
+        public DocficaContext()
+        {
+            MongoClient client = new MongoClient();
+            _db = client.GetDatabase("Alperia");
+            _db.GetCollection<MainEle>("Docfica");
+        }
+
+        public IMongoCollection<Docfica> DocficaCollection => _db.GetCollection<Docfica>("Docfica");
     }
 }
