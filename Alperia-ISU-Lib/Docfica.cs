@@ -33,6 +33,8 @@ namespace Alperia_ISU_Lib
         public string FAEDN { get; set; }
         [Required(ErrorMessage = "{0} is required")]
         public string HKONT { get; set; }
+        public string VKONT { get; set; }
+        public string VTREF { get; set; }
         public string PRCTR { get; set; }
         public string OPTXT { get; set; }
         public string VALUT { get; set; }

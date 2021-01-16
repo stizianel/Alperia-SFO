@@ -89,9 +89,9 @@ public class GasValidator : AbstractValidator<MainGas>
        .Must(x => lovMatnr.Contains(x))
        .WithMessage("MATNR errato {PropertyValue}");
 
-        RuleFor(x => x.Z_PRODOTTO)
-       .Must(x => lovZprodotto.Contains(x))
-       .WithMessage("Z_PRODOTTO errato {PropertyValue}");
+       // RuleFor(x => x.Z_PRODOTTO)
+       //.Must(x => lovZprodotto.Contains(x))
+       //.WithMessage("Z_PRODOTTO errato {PropertyValue}");
 
         RuleFor(x => x.ZEGERR_INFO).NotEmpty().When(x => x.ZWGRUPPE == "ZGCORR").WithMessage("ZEGERR_INFO assente per ZGCORR");
         RuleFor(x => x.NCAP_STANZVOR_CF1).NotEmpty().When(x => x.ZWGRUPPE == "ZGCORR").WithMessage("NCAP_STANZVOR_CF1 assente per ZGCORR");

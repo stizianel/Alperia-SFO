@@ -177,7 +177,7 @@ namespace Isu_ver_fica
             .WriteTo.File("E:\\work\\Alperia\\PRD\\log-fica.log", rollingInterval: RollingInterval.Minute)
             .CreateLogger();
             Log.Logger.Information("Inizio trasformazione");
-            var readerFica = new StreamReader("E:\\work\\Alperia\\PRD\\20201123_1.csv");
+            var readerFica = new StreamReader("E:\\work\\Alperia\\PRD\\20201129_1.csv");
             var csvFica = new CsvReader(readerFica, CultureInfo.InvariantCulture);
             csvFica.Configuration.Delimiter = ";";
             csvFica.Configuration.HeaderValidated = null;
@@ -189,7 +189,7 @@ namespace Isu_ver_fica
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var writerFica = new StreamWriter("E:\\work\\Alperia\\PRD\\SUM-FICA-out.csv");
+            var writerFica = new StreamWriter("E:\\work\\Alperia\\PRD\\20201129-FICA-out.csv");
             var outFica = new CsvWriter(writerFica, CultureInfo.InvariantCulture);
             outFica.Configuration.Delimiter = ";";
             var recFica = new Docfica();
@@ -220,6 +220,8 @@ namespace Isu_ver_fica
                 recFica.BETRW = decode_betrw(fica.BETRW);
                 recFica.FAEDN = fica.FAEDN;
                 recFica.HKONT = decode_hkont(fica.HKONT);
+                recFica.VKONT = fica.VKONT;
+                recFica.VTREF = fica.VTREF;
                 recFica.PRCTR = fica.PRCTR;
                 recFica.OPTXT = fica.OPTXT;
                 recFica.VALUT = fica.VALUT;

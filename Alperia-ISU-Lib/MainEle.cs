@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Permissions;
 using MongoDB.Driver;
-
+/* Aggiornata al 16.01.2021*/
 public class MainEle
 {
         public string SRC_SYSTEM { get; set; }
@@ -133,7 +133,8 @@ public class MainEle
         public string COGNOMEFIRMA { get; set; }
         public string AB_MANDATO { get; set; }
         public string BIS_MANDATO { get; set; }
-        public string ZNRIL_IVA { get; set; }
+    public string Z_LINGUA { get; set; }
+    public string ZNRIL_IVA { get; set; }
         public string ZGRUPIVA { get; set; }
         public string ZAB_GR_IVA { get; set; }
         public string ZBIS_GR_IVA { get; set; }
@@ -146,7 +147,7 @@ public class MainEle
         public string Z_COBRAND { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string IKEY { get; set; }
-        public string AUSGRUP_IN { get; set; }
+//        public string AUSGRUP_IN { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string ZAHLKOND { get; set; }
     [Required(ErrorMessage = "{0} is required")]
@@ -173,7 +174,8 @@ public class MainEle
         public string EXRAT { get; set; }
         public string Z_PLAFOND { get; set; }
         public string Z_EROSO { get; set; }
-        public string INTEREST_LOCK { get; set; }
+    public string ZEXABIT { get; set; }
+    public string INTEREST_LOCK { get; set; }
         public string TDATE { get; set; }
         public string INV_REASON { get; set; }
         public string EZASP { get; set; }
@@ -217,7 +219,8 @@ public class MainEle
     public string IM_AB { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string IM_SPEBENE { get; set; }
-        public string BRANCHE { get; set; }
+    public string Z_DISVENDITORE { get; set; }
+    public string BRANCHE { get; set; }
         public string Z_CUTOFF { get; set; }
         public string Z_ULTFATT { get; set; }
         public string Z_TPULTFATT { get; set; }
@@ -263,7 +266,8 @@ public class MainEle
     public string TARIFART_ER_OPZ { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string KONDIGR_ER_OPZ { get; set; }
-        public string IMPIANTO_OLD { get; set; }
+    public string EF_SALVAG { get; set; }
+    public string IMPIANTO_OLD { get; set; }
     [Required(ErrorMessage = "{0} is required")]
     public string ZTIP_OFF { get; set; }
     [Required(ErrorMessage = "{0} is required")]

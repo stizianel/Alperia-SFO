@@ -29,12 +29,12 @@ namespace Isu_ver_MainGas
             //})
             .CreateLogger();
 
-            var fValid = new StreamReader("E:\\work\\Alperia\\PRD\\validaz-semplici.CSV");
+            var fValid = new StreamReader("E:\\work\\Alperia\\PRD\\valid_semplici.csv");
             var csvValid = new CsvReader(fValid, CultureInfo.InvariantCulture);
             csvValid.Configuration.Delimiter = ";";
             List<ValidSemplici> lvalid = ValidSemplici.LoadValidSemplici(csvValid);
 
-            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201107_MAIN_GAS.csv");
+            var readerGas = new StreamReader("E:\\work\\Alperia\\PRD\\100_20201125_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
             csvGas.Configuration.BadDataFound = null;
@@ -47,7 +47,7 @@ namespace Isu_ver_MainGas
             
 
             lGas = ProcessGas(csvGas);
-            var lGasTemp = lGas.Skip(2000).Take(100);
+            var lGasTemp = lGas.Take(100);
 
             //Log.Logger.Information("Inizio Estrazione elenco BP");
             //List<string> lBps = lGasTemp.Select(p => p.BPEXT).Distinct().ToList();
