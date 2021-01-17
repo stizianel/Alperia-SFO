@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "elabora_partite": {
+      "commandName": "Project",
+      "commandLineArgs": "PARZ"
+    }
+  }
+}

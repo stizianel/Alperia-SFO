@@ -3,10 +3,13 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Permissions;
 using MongoDB.Driver;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 /* Aggiornata al 16.01.2021*/
 public class MainEle
 {
-        public string SRC_SYSTEM { get; set; }
+    public ObjectId Id { get; set; }
+    public string SRC_SYSTEM { get; set; }
         public string RUN_ID { get; set; }
         public int ROW_ID { get; set; }
     [Required(ErrorMessage = "{0} is required")]

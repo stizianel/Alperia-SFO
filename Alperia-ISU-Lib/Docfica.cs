@@ -11,7 +11,7 @@ namespace Alperia_ISU_Lib
         [Required(ErrorMessage = "{0} is required")]
         public string RUN_ID { get; set; }
         [Required(ErrorMessage = "{0} is required")]
-        public int ROW_ID { get; set; }
+        public string ROW_ID { get; set; }
         [Required(ErrorMessage = "{0} is required")]
         public string KEY_EXT { get; set; }
         [Required(ErrorMessage = "{0} is required")]
@@ -52,6 +52,7 @@ namespace Alperia_ISU_Lib
         public string TDATE_PAR { get; set; }
         public string AUGRD { get; set; }
         public string ADD_REFOBJ { get; set; }
+        public string PYMET { get; set; }
         public string GSBER { get; set; }
         public string ZNUM_PIANO { get; set; }
         public string ZSCAD_RATA { get; set; }

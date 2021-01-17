@@ -2,10 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Security.Permissions;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 public class MainGas
 {
+    public ObjectId Id { get; set; }
     public string SRC_SYSTEM { get; set; }
     public string RUN_ID { get; set; }
     public int ROW_ID { get; set; }
