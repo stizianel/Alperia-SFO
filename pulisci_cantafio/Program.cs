@@ -13,13 +13,13 @@ namespace pulisci_cantafio
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            var readerFica = new StreamReader("C:\\work\\Alperia\\PRD\\100_20210116_1_DOCFICA.csv");
+            var readerFica = new StreamReader("e:\\work\\Alperia\\PRD\\100_20210130_1_DOCFICA.csv");
             var csvFica = new CsvReader(readerFica, CultureInfo.InvariantCulture);
             csvFica.Configuration.Delimiter = ";";
             //csvFica.Configuration.HeaderValidated = true;
             //csvFica.Configuration.MissingFieldFound = null;
 
-            var writerFica = new StreamWriter("C:\\work\\Alperia\\PRD\\A100_20210116_1_DOCFICA.csv");
+            var writerFica = new StreamWriter("e:\\work\\Alperia\\PRD\\B100_20210130_1_DOCFICA.csv");
             var outFica = new CsvWriter(writerFica, CultureInfo.InvariantCulture);
             outFica.Configuration.Delimiter = ";";
             outFica.Configuration.HasHeaderRecord = false;
@@ -28,23 +28,47 @@ namespace pulisci_cantafio
 
             List<Docfica> loutFica = new List<Docfica>();
 
+
+            var dep_num = 0;
             foreach (var fica in lfica)
             {
                 var depFica = new Docfica();
-                var dtLimit = DateTime.ParseExact("20201130",
-                                  "yyyyMMdd",
-                                   CultureInfo.InvariantCulture);
-                var wBldat = DateTime.ParseExact(fica.BLDAT,
-                                  "yyyyMMdd",
-                                   CultureInfo.InvariantCulture);
+                //var dtLimit = DateTime.ParseExact("20201130",
+                //                  "yyyyMMdd",
+                //                   CultureInfo.InvariantCulture);
+                //var wBldat = DateTime.ParseExact(fica.BLDAT,
+                //                  "yyyyMMdd",
+                //                   CultureInfo.InvariantCulture);
 
-                if (fica.BLART == "RA" || fica.AUGST == "9" || wBldat > dtLimit)
+                //if (fica.BLART == "RA" || fica.AUGST == "9" || wBldat > dtLimit)
+                //{
+                //    Console.WriteLine("Scartato {0} - {1}", fica.BLART, fica.AUGST );
+                //    continue;
+                //}
+                if (fica.BLART == "DC")
                 {
-                    Console.WriteLine("Scartato {0} - {1}", fica.BLART, fica.AUGST );
+                    Console.WriteLine("Scartato {0} - {1}", fica.BLART, fica.ROW_ID);
                     continue;
                 }
+                if (fica.BLART== "ME")
+                {
+                    if (String.IsNullOrEmpty(fica.XBLNR))
+                    {
+                        fica.XBLNR = fica.KEY_EXT.Substring(0, 12);
+                    }
+                }
+                dep_num += 1;
                 depFica = fica;
-                depFica.ADD_REFOBJ = "";
+                depFica.ROW_ID = dep_num.ToString("D10");
+
+                if (!String.IsNullOrEmpty(fica.VTREF))
+                {
+                    var depVtref = Int32.Parse(fica.VTREF);
+                    depFica.VTREF = "100_" + depVtref.ToString("D10");
+                }
+
+                depFica.VKONT = "100_" + depFica.VKONT;
+                
                 loutFica.Add(depFica);
             }
             outFica.WriteRecords(loutFica);

@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using CsvHelper.Configuration.Attributes;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,6 +8,8 @@ namespace Alperia_ISU_Lib
 {
     public class Docfica
     {
+        [Ignore]
+        public ObjectId Id { get; set; }
         [Required(ErrorMessage = "{0} is required")]
         public string SRC_SYSTEM { get; set; }
         [Required(ErrorMessage = "{0} is required")]

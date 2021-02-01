@@ -43,11 +43,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "elabora_partite", "elabora_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "load_MainEle", "load_MainEle\load_MainEle.csproj", "{F9239B62-EB6E-4DDF-A24E-435CAAFF86B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "load_zae", "load_zae\load_zae.csproj", "{94950ED5-FE1A-46B2-8EFF-94948FF97720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "load_zae", "load_zae\load_zae.csproj", "{94950ED5-FE1A-46B2-8EFF-94948FF97720}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pulisci_cantafio", "pulisci_cantafio\pulisci_cantafio.csproj", "{7578AE21-BF9A-4418-A99C-637D82F9FD9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pulisci_cantafio", "pulisci_cantafio\pulisci_cantafio.csproj", "{7578AE21-BF9A-4418-A99C-637D82F9FD9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "elabora_dfkkop_sum", "elabora_dfkkop_sum\elabora_dfkkop_sum.csproj", "{C514485D-6AFE-47B1-9052-229F262B76A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "elabora_dfkkop_sum", "elabora_dfkkop_sum\elabora_dfkkop_sum.csproj", "{C514485D-6AFE-47B1-9052-229F262B76A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "load_docfica", "load_docfica\load_docfica.csproj", "{7EE3420E-C561-4C41-8349-23071F197041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "estrai-fica-DB", "estrai-fica-DB\estrai-fica-DB.csproj", "{7916CC3A-49BA-4D9D-8DA2-4AD0E0478947}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +127,14 @@ Global
 		{C514485D-6AFE-47B1-9052-229F262B76A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C514485D-6AFE-47B1-9052-229F262B76A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C514485D-6AFE-47B1-9052-229F262B76A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE3420E-C561-4C41-8349-23071F197041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE3420E-C561-4C41-8349-23071F197041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE3420E-C561-4C41-8349-23071F197041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE3420E-C561-4C41-8349-23071F197041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7916CC3A-49BA-4D9D-8DA2-4AD0E0478947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7916CC3A-49BA-4D9D-8DA2-4AD0E0478947}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7916CC3A-49BA-4D9D-8DA2-4AD0E0478947}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7916CC3A-49BA-4D9D-8DA2-4AD0E0478947}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

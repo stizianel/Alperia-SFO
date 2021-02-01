@@ -15,7 +15,7 @@ namespace load_MainEle
             Console.WriteLine("Hello World!");
             var ctx = new MainEleContext();
 
-            var readerEle = new StreamReader("c:\\work\\Alperia\\PRD\\100_20210115_MAIN_ELE.csv");
+            var readerEle = new StreamReader("e:\\work\\Alperia\\PRD\\100_20210131_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
             csvEle.Configuration.Delimiter = ";";
             csvEle.Configuration.BadDataFound = null;

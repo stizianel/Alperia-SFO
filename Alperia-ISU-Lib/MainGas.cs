@@ -198,7 +198,7 @@ public class MainGas
     public string Z_TPULTFATT { get; set; }
 
     public string ZZONA_CLIMA { get; set; }
-
+    public string OP_GG_AUSIL { get; set; }
     public string OP_GU_CATUSO { get; set; }
     public string OP_GU_STATOF { get; set; }
 

@@ -13,14 +13,14 @@ namespace load_MainGas
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Load MainGas");
             //   var cs = "Host=localhost;Username=postgres;Password=Bld13@dll;Database=postgres";
             //   using var con = new NpgsqlConnection(cs);
             //   con.Open();
 
             var ctx = new MainGasContext();
 
-            var readerGas = new StreamReader("c:\\work\\Alperia\\PRD\\100_20210115_MAIN_GAS.csv");
+            var readerGas = new StreamReader("e:\\work\\Alperia\\PRD\\100_20210131_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
             csvGas.Configuration.BadDataFound = null;
@@ -29,7 +29,7 @@ namespace load_MainGas
 
             InsMongoMulti(lGas, ctx);
 
-            Console.WriteLine("Fine programma");
+            Console.WriteLine("Fine Load MainGas");
         }
         private static List<MainGas> ProcessGas(CsvReader csvGas)
         {
