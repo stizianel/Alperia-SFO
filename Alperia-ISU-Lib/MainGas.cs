@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Permissions;
+using Alperia_ISU_Lib;
+using CsvHelper.Configuration.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 public class MainGas
 {
+    [Ignore]
     public ObjectId Id { get; set; }
     public string SRC_SYSTEM { get; set; }
     public string RUN_ID { get; set; }
@@ -395,19 +400,42 @@ public class MainGas
         }
 
     }
-}
 
-public class MainGasContext
-{
-    private readonly IMongoDatabase _db;
-
-    public MainGasContext()
+    public List<GcpSchema> getJsonSchema()
     {
-        MongoClient client = new MongoClient();
-        _db = client.GetDatabase("Alperia");
-        _db.GetCollection<MainGas>("MainGas");
-    }
+        var res = typeof(MainGas).GetProperties();
+        List<GcpSchema> lSchema = new List<GcpSchema>();
 
-    public IMongoCollection<MainGas> MainGasCollection => _db.GetCollection<MainGas>("MainGas");
+        foreach (var info in res)
+        {
+            var depProp = new GcpSchema();
+            Console.WriteLine($"{info.Name} - {info.PropertyType}");
+            depProp.name = info.Name;
+            depProp.description = info.Name;
+            depProp.mode = "NULLABLE";
+            if (info.PropertyType == typeof(String))
+            {
+                depProp.type = "STRING";
+            } else
+            {
+                depProp.type = "INTEGER";
+            }
+            lSchema.Add(depProp);
+        }
+        return lSchema;
+    }
 }
+    public class MainGasContext
+    {
+        private readonly IMongoDatabase _db;
+
+        public MainGasContext()
+        {
+            MongoClient client = new MongoClient();
+            _db = client.GetDatabase("Alperia");
+            _db.GetCollection<MainGas>("MainGas");
+        }
+
+        public IMongoCollection<MainGas> MainGasCollection => _db.GetCollection<MainGas>("MainGas");
+    }
 

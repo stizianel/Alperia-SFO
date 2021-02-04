@@ -80,7 +80,7 @@ namespace elabora_partite
                     var wCfPi = GetCfPi(recDfk.GPART, recDfk.SPART, cEle, cGas);
                 }
                 dep_row_id += 1;
-                var res = ComponiDocFica(recDfk, firstEle, dep_row_id, wCfPi);
+                var res = ComponiDocFica(recDfk, firstEle, dep_row_id, cEle,cGas);
                 lDocFica.Add(res);
                 Console.WriteLine(righe += 1);
                 if(res.EXT_UI == "")

@@ -222,7 +222,7 @@ namespace Isu_ver_fica
                 recFica.HKONT = decode_hkont(fica.HKONT);
                 recFica.VKONT = fica.VKONT;
                 recFica.VTREF = fica.VTREF;
-                recFica.PRCTR = fica.PRCTR;
+                //recFica.PRCTR = fica.PRCTR;
                 recFica.OPTXT = fica.OPTXT;
                 recFica.VALUT = fica.VALUT;
                 recFica.RFZAS = fica.RFZAS;

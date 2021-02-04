@@ -39,7 +39,7 @@ namespace Alperia_ISU_Lib
         public string HKONT { get; set; }
         public string VKONT { get; set; }
         public string VTREF { get; set; }
-        public string PRCTR { get; set; }
+        //public string PRCTR { get; set; }
         public string OPTXT { get; set; }
         public string VALUT { get; set; }
         public string RFZAS { get; set; }

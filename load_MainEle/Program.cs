@@ -12,30 +12,55 @@ namespace load_MainEle
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Load Main Ele");
             var ctx = new MainEleContext();
 
-            var readerEle = new StreamReader("e:\\work\\Alperia\\PRD\\100_20210131_MAIN_ELE.csv");
+            var readerEle = new StreamReader("e:\\work\\Alperia\\PRD\\400_20210204_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
+            List<string> badRecord = new List<string>();
+
             csvEle.Configuration.Delimiter = ";";
-            csvEle.Configuration.BadDataFound = null;
+            csvEle.Configuration.IgnoreQuotes = true;
+            //csvEle.Configuration.BadDataFound = null;
+            csvEle.Configuration.BadDataFound = context => badRecord.Add(context.RawRecord);
 
             var lEle = ProcessEle(csvEle);
 
-            InsMongoMulti(lEle, ctx);
+            if(badRecord.Count > 0)
+            {
+                Console.WriteLine($"Errori nel processo file csv {badRecord.Count}");
+            }
 
-            Console.WriteLine("Fine programma");
+            List<MainEle> depLele = new List<MainEle>();
+
+            var count = 0;
+            foreach (var item in lEle)
+            {
+                count++;
+                depLele.Add(item);
+                if(count == 10000)
+                {
+                    Console.WriteLine("Scrivo blocco 10000");
+                    InsMongoMulti(depLele, ctx);
+                    depLele = new List<MainEle>();
+                    count = 0;
+                }
+            }
+
+            InsMongoMulti(depLele, ctx);
+
+            Console.WriteLine("Fine Load Main Ele");
         }
         private static List<MainEle> ProcessEle(CsvReader csvEle)
         {
             try
             {
-                var zGas = csvEle.GetRecords<MainEle>().ToList();
-                return zGas;
+                var zEle = csvEle.GetRecords<MainEle>().ToList();
+                return zEle;
             }
             catch (Exception)
             {
-                Console.WriteLine("Errore su file {0}", "MainGas");
+                Console.WriteLine("Errore su file {0}", "MainEle");
                 throw;
             }
         }
@@ -45,10 +70,10 @@ namespace load_MainEle
             {
                 ctx.MainEleCollection.InsertMany(lEle);
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                Log.Information("errore scrittura");
+                Console.WriteLine($"errore scrittura first {e.Message}");
             }
         }
     }

@@ -20,12 +20,29 @@ namespace load_MainGas
 
             var ctx = new MainGasContext();
 
-            var readerGas = new StreamReader("e:\\work\\Alperia\\PRD\\100_20210131_MAIN_GAS.csv");
+            var readerGas = new StreamReader("e:\\work\\Alperia\\PRD\\400_20210204_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
+            csvGas.Configuration.IgnoreQuotes = true;
+
+            List<string> badRecord = new List<string>();
             csvGas.Configuration.BadDataFound = null;
 
             var lGas = ProcessGas(csvGas);
+            
+            if (badRecord.Count > 0)
+            {
+                Console.WriteLine($"Errori nel processo file csv {badRecord.Count}");
+            }
+
+            //var queryables = from n in lGas.AsQueryable()
+            //                 where n.AUSZDAT == "99991231"
+            //                 group n by new
+            //                 {
+            //                     PDR = n.EXT_UI,
+            //                     n.AUSZDAT,
+            //                     COUNT = n.Count()
+            //                 };
 
             InsMongoMulti(lGas, ctx);
 
