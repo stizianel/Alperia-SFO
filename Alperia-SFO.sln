@@ -57,11 +57,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlperiaLibrary", "AlperiaLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "copyMainGas", "copyMainGas\copyMainGas.csproj", "{07054BE9-9C32-4138-AA63-4B54CE43A7FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainGasOut", "MainGasOut\MainGasOut.csproj", "{E0FABC59-1A9F-4ED1-A345-250A2FD66EF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainGasOut", "MainGasOut\MainGasOut.csproj", "{E0FABC59-1A9F-4ED1-A345-250A2FD66EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainEleOut", "MainEleOut\MainEleOut.csproj", "{A553A774-B65E-45AB-A70B-35DCA10515DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainEleOut", "MainEleOut\MainEleOut.csproj", "{A553A774-B65E-45AB-A70B-35DCA10515DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocFicaOut", "DocFicaOut\DocFicaOut.csproj", "{B5A8AD10-F96C-4671-AA30-10E2F1EE0610}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocFicaOut", "DocFicaOut\DocFicaOut.csproj", "{B5A8AD10-F96C-4671-AA30-10E2F1EE0610}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadAcciseFromZitau", "LoadAcciseFromZitau\LoadAcciseFromZitau.csproj", "{DDF9E954-D972-44A0-A0AE-FE7AEB297840}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -165,6 +167,10 @@ Global
 		{B5A8AD10-F96C-4671-AA30-10E2F1EE0610}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5A8AD10-F96C-4671-AA30-10E2F1EE0610}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5A8AD10-F96C-4671-AA30-10E2F1EE0610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDF9E954-D972-44A0-A0AE-FE7AEB297840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDF9E954-D972-44A0-A0AE-FE7AEB297840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDF9E954-D972-44A0-A0AE-FE7AEB297840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDF9E954-D972-44A0-A0AE-FE7AEB297840}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
