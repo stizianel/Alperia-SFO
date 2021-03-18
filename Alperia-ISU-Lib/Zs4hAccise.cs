@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,7 @@ namespace Alperia_ISU_Lib
 {
     public class Zs4hAccise
     {
+        public ObjectId Id { get; set; }
         public string MANDT { get; set; }
         public string SPARTE { get; set; }
         public string POD { get; set; }
