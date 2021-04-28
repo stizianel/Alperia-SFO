@@ -83,9 +83,23 @@ namespace Alperia_ISU_Lib
         {
             MongoClient client = new MongoClient();
             _db = client.GetDatabase("Alperia");
-            _db.GetCollection<MainEle>("Docfica");
+            _db.GetCollection<Docfica>("Docfica");
         }
 
         public IMongoCollection<Docfica> DocficaCollection => _db.GetCollection<Docfica>("Docfica");
+    }
+
+    public class CantafioContext
+    {
+        private readonly IMongoDatabase _db;
+
+        public CantafioContext()
+        {
+            MongoClient client = new MongoClient();
+            _db = client.GetDatabase("Alperia");
+            _db.GetCollection<Docfica>("Cantafio");
+        }
+
+        public IMongoCollection<Docfica> CantafioCollection => _db.GetCollection<Docfica>("Cantafio");
     }
 }

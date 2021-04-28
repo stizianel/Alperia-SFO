@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Alperia_ISU_Lib
 {
-    public class ConfValidator : AbstractValidator<MainConf>
+    public class ConfValidator : AbstractValidator<ConfEle>
     {
         public List<CompVend> lcomp { get; set; }
         public ConfValidator(string i_ab, List<CompVend> lcomp)

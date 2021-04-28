@@ -1,29 +1,28 @@
 ﻿using Alperia_ISU_Lib;
 using CsvHelper;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace load_docfica
+namespace load_Cantafio
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Load DocFica start");
-            var ctx = new DocficaContext();
-            
-            
+            Console.WriteLine("Load Cantafio start");
+            var ctx = new CantafioContext();
+
+
             List<string> badRecord = new List<string>();
             var readerFica = new StreamReader("c:\\$work\\Alperia\\PRD\\100_20210409_1_DOCFICA.csv");
             var csvFica = new CsvReader(readerFica, CultureInfo.InvariantCulture);
             csvFica.Configuration.Delimiter = ";";
             csvFica.Configuration.IgnoreQuotes = true;
             csvFica.Configuration.BadDataFound = context => badRecord.Add(context.RawRecord);
-            
+
             //csvFica.Configuration.HeaderValidated = true;
             //csvFica.Configuration.MissingFieldFound = null;
 
@@ -51,11 +50,11 @@ namespace load_docfica
                 throw;
             }
         }
-        private static void InsMongoMulti(List<Docfica> lDocfica, DocficaContext ctx)
+        private static void InsMongoMulti(List<Docfica> lDocfica, CantafioContext ctx)
         {
             try
             {
-                ctx.DocficaCollection.InsertMany(lDocfica);
+                ctx.CantafioCollection.InsertMany(lDocfica);
             }
             catch (Exception)
             {

@@ -15,7 +15,7 @@ namespace load_MainEle
             Console.WriteLine("Load Main Ele");
             var ctx = new MainEleContext();
 
-            var readerEle = new StreamReader("e:\\work\\Alperia\\PRD\\400_20210204_MAIN_ELE.csv");
+            var readerEle = new StreamReader("c:\\$work\\alperia\\prd\\100_20210412_MAIN_ELE.csv");
             var csvEle = new CsvReader(readerEle, CultureInfo.InvariantCulture);
             List<string> badRecord = new List<string>();
 

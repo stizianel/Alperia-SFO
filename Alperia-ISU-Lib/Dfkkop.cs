@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -33,6 +34,19 @@ namespace Alperia_ISU_Lib
         public string BLART { get; set; }
         public string XBLNR { get; set; }
         public string SCTAX { get; set; }
+    }
 
+    public class DfkkopContext
+    {
+        private readonly IMongoDatabase _db;
+
+        public DfkkopContext()
+        {
+            MongoClient client = new MongoClient();
+            _db = client.GetDatabase("Alperia");
+            _db.GetCollection<Dfkkop>("Dfkkop");
+        }
+
+        public IMongoCollection<Dfkkop> DfkkopCollection => _db.GetCollection<Dfkkop>("Dfkkop");
     }
 }

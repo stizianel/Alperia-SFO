@@ -20,7 +20,7 @@ namespace load_MainGas
 
             var ctx = new MainGasContext();
 
-            var readerGas = new StreamReader("c:\\$work\\Temp\\100_20210226_MAIN_GAS.csv");
+            var readerGas = new StreamReader("c:\\$work\\alperia\\prd\\100_20210412_MAIN_GAS.csv");
             var csvGas = new CsvReader(readerGas, CultureInfo.InvariantCulture);
             csvGas.Configuration.Delimiter = ";";
             csvGas.Configuration.IgnoreQuotes = true;

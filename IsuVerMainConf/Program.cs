@@ -36,7 +36,7 @@ namespace IsuVerMainConf
             List<CompVend> lCompVend = ProcessCompVend(csvCompVend);
             List<string> lovComp = lCompVend.Select(x => x.COD_COMPONENTE).Distinct().ToList();
 
-            var lConfComm = new List<MainConf>();
+            var lConfComm = new List<ConfEle>();
             Log.Logger.Information("Inizio LOG");
             lConfComm = ProcessConf(csvGas);
             var lpdr = lConfComm.Select(x => x.EXT_UI).Distinct().ToList();
@@ -78,11 +78,11 @@ namespace IsuVerMainConf
             Console.ReadKey();
         }
 
-        private static List<MainConf> ProcessConf(CsvReader csvGas)
+        private static List<ConfEle> ProcessConf(CsvReader csvGas)
         {
             try
             {
-                var zGas = csvGas.GetRecords<MainConf>().ToList();
+                var zGas = csvGas.GetRecords<ConfEle>().ToList();
                 return zGas;
             }
             catch (Exception)
